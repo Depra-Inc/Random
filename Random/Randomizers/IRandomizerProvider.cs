@@ -1,4 +1,4 @@
-namespace Depra.Random.Domain
+namespace Depra.Random.Randomizers
 {
     internal interface IRandomizerProvider
     {

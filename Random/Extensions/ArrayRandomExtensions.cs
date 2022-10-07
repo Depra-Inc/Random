@@ -1,5 +1,5 @@
 using System;
-using Depra.Random.Domain;
+using Depra.Random.Randomizers;
 
 namespace Depra.Random.Extensions
 {

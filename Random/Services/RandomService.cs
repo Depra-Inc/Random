@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Depra.Random.Domain;
+using Depra.Random.Randomizers;
 
 namespace Depra.Random.Services
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Depra.Random.Domain
+namespace Depra.Random.Randomizers
 {
     public abstract class RandomizerProvider : IRandomizerProvider
     {
