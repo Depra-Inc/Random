@@ -14,7 +14,7 @@ namespace Depra.Random.Extensions
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in enumerable.</typeparam>
         /// <returns>Random <see cref="T"/>.</returns>
-        public static T RandomElement<T>(this IEnumerable<T> elements, IRandomizer<int> randomizer)
+        public static T RandomElement<T>(this IEnumerable<T> elements, INumberRandomizer<int> randomizer)
         {
             if (elements == null)
             {
@@ -30,7 +30,7 @@ namespace Depra.Random.Extensions
             return elements.ElementAt(randomIndex);
         }
 
-        public static int RandomElementCount<T>(this IReadOnlyList<T> readOnlyList, IRandomizer<int> randomizer,
+        public static int RandomElementCount<T>(this IReadOnlyList<T> readOnlyList, INumberRandomizer<int> randomizer,
             int min = 0, int max = -1)
         {
             if (max == -1)
@@ -42,7 +42,7 @@ namespace Depra.Random.Extensions
         }
 
         public static IEnumerable<T> RandomUniqueElements<T>(this IEnumerable<T> enumerable,
-            IRandomizer<int> randomizer, int min = 0, int max = -1)
+            INumberRandomizer<int> randomizer, int min = 0, int max = -1)
         {
             var array = enumerable.ToArray();
             var randomElementCount = array.RandomElementCount(randomizer, min, max);
@@ -63,7 +63,7 @@ namespace Depra.Random.Extensions
         /// <typeparam name="T">Type of elements in enumerable.</typeparam>
         /// <returns>Random element.</returns>
         /// <exception cref="Exception">Random double was more than sum of the weights.</exception>
-        public static T GetWeighedRandom<T>(this IEnumerable<T> enumerable, IRandomizer<double> randomizer,
+        public static T GetWeighedRandom<T>(this IEnumerable<T> enumerable, INumberRandomizer<double> randomizer,
             Func<T, double> weight)
         {
             var array = enumerable.ToArray();

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Depra.Random.Randomizers;
 
 namespace Depra.Random.System
@@ -6,7 +7,7 @@ namespace Depra.Random.System
     /// <summary>
     /// Facade for randomizer used to <see cref="Random"/>.
     /// </summary>
-    public sealed class SystemRandomizers : IRandomizer<int>, IRandomizer<double>, IRandomizer<long>
+    public sealed class SystemRandomizers : INumberRandomizer<int>, INumberRandomizer<double>, INumberRandomizer<long>
     {
         private readonly Func<global::System.Random> _randomFactory;
 
@@ -14,13 +15,13 @@ namespace Depra.Random.System
         private LongRandomizer _longRandomizer;
         private DoubleRandomizer _doubleRandomizer;
 
-        private IRandomizer<int> Int =>
+        private INumberRandomizer<int> Int =>
             _intRandomizer ?? (_intRandomizer = new IntRandomizer(_randomFactory));
 
-        private IRandomizer<long> Long =>
+        private INumberRandomizer<long> Long =>
             _longRandomizer ?? (_longRandomizer = new LongRandomizer(_randomFactory));
 
-        private IRandomizer<double> Double =>
+        private INumberRandomizer<double> Double =>
             _doubleRandomizer ?? (_doubleRandomizer = new DoubleRandomizer(_randomFactory));
 
         public SystemRandomizers(Func<global::System.Random> randomFactory) => _randomFactory = randomFactory;
@@ -31,11 +32,23 @@ namespace Depra.Random.System
 
         double IRandomizer<double>.Next() => Double.Next();
 
-        int IRandomizer<int>.Next(int min, int max) => Int.Next(min, max);
+        int INumberRandomizer<int>.Next(int min, int max) => Int.Next(min, max);
 
-        long IRandomizer<long>.Next(long min, long max) => Long.Next(min, max);
+        int INumberRandomizer<int>.NextPositive(int maxExclusive) => Int.NextNegative(maxExclusive);
 
-        double IRandomizer<double>.Next(double min, double max) => Double.Next(min, max);
+        int INumberRandomizer<int>.NextNegative(int minInclusive) => Int.NextNegative(minInclusive);
+
+        long INumberRandomizer<long>.Next(long min, long max) => Long.Next(min, max);
+
+        long INumberRandomizer<long>.NextPositive(long maxExclusive) => Long.NextPositive(maxExclusive);
+
+        long INumberRandomizer<long>.NextNegative(long minInclusive) => Long.NextNegative(minInclusive);
+
+        double INumberRandomizer<double>.Next(double min, double max) => Double.Next(min, max);
+
+        double INumberRandomizer<double>.NextPositive(double maxExclusive) => Double.NextPositive(maxExclusive);
+
+        double INumberRandomizer<double>.NextNegative(double minInclusive) => Double.NextNegative(minInclusive);
 
         private abstract class SystemRandomizer
         {
@@ -86,6 +99,30 @@ namespace Depra.Random.System
             public double NextNegative(double minInclusive) => Next(minInclusive, -1);
 
             public DoubleRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class BytesRandomizer : SystemRandomizer
+        {
+            public void Next(byte[] buffer) => GetRandom().NextBytes(buffer);
+
+            public BytesRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class CharsRandomizer : SystemRandomizer
+        {
+            public void Next(char[] buffer) => GetRandom().NextChars(buffer);
+
+            public IEnumerable<char> Next(int count, bool includeLowerCase) =>
+                GetRandom().NextChars(count, includeLowerCase);
+
+            public CharsRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class StringRandomizer : SystemRandomizer
+        {
+            public string Next(int count, bool includeLowerCase) => GetRandom().NextString(count, includeLowerCase);
+
+            public StringRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
     }
 }

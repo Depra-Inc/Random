@@ -8,9 +8,9 @@ using NUnit.Framework;
 namespace Depra.Random.UnitTests
 {
     [TestFixture]
-    public class RandomizerTests
+    public class NumberRandomizerTests
     {
-        private static IEnumerable<IRandomizer<int>> CreateIntRandomizers()
+        private static IEnumerable<INumberRandomizer<int>> CreateIntRandomizers()
         {
             yield return new SystemRandomizers(() => new global::System.Random());
             yield return new SystemRandomizers(() => new ThreadSafeRandom());
@@ -19,7 +19,7 @@ namespace Depra.Random.UnitTests
         [Test]
         public void WhenRandomIntegerIsTaken_AndTakenByRange_ThenResultNumberInRange(
             [ValueSource(nameof(CreateIntRandomizers))]
-            IRandomizer<int> randomizer)
+            INumberRandomizer<int> randomizer)
         {
             // Arrange.
             const int minValue = 0;
@@ -38,7 +38,7 @@ namespace Depra.Random.UnitTests
         [Test]
         public void WhenTwoRandomIntegersAreTaken_AndTakenInALoop_ThenNoDuplicateValuesFound(
             [ValueSource(nameof(CreateIntRandomizers))]
-            IRandomizer<int> randomizer)
+            INumberRandomizer<int> randomizer)
         {
             // Arrange.
             var randomValues = new int[100];

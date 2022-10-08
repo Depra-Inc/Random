@@ -14,7 +14,7 @@ namespace Depra.Random.Extensions
         /// <param name="array">Array to get element of type <see cref="T"/>.</param>
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in array.</typeparam>
-        public static void Shuffle<T>(this T[] array, IRandomizer<int> randomizer)
+        public static void Shuffle<T>(this T[] array, INumberRandomizer<int> randomizer)
         {
             if (array.Length < 1)
             {

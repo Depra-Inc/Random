@@ -28,33 +28,6 @@ namespace Depra.Random.Extensions
         }
 
         /// <summary>
-        /// Generate random string of <paramref name="length"/> for <paramref name="charset"/>.
-        /// </summary>
-        /// <remarks>
-        /// <see href="https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings">source</see>
-        /// </remarks>
-        public static string NextString(this INumberRandomizer<int> randomizer, int length, string charset)
-        {
-            if (length < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(length));
-            }
-
-            if (string.IsNullOrEmpty(charset))
-            {
-                throw new ArgumentException(nameof(charset));
-            }
-
-            var randomString = new char[length];
-            for (var i = 0; i < length; i++)
-            {
-                randomString[i] = charset[randomizer.NextPositive(charset.Length)];
-            }
-
-            return new string(randomString);
-        }
-
-        /// <summary>
         /// Generate random double between <paramref name="minValue"/> and <paramref name="maxValue"/>.
         /// <para></para>
         /// Note: This is a scaled implementation: (random.nextDouble() * (max - min)) + min

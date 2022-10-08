@@ -9,7 +9,7 @@ namespace Depra.Random.Benchmarks
 {
     public static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
                 .AddValidator(JitOptimizationsValidator.FailOnError)

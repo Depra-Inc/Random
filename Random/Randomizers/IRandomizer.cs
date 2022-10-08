@@ -1,9 +1,7 @@
 namespace Depra.Random.Randomizers
 {
-    public interface IRandomizer<T>
+    public interface IRandomizer<out T>
     {
         T Next();
-        
-        T Next(T minInclusive, T maxExclusive);
     }
 }

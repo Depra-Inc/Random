@@ -12,7 +12,7 @@ namespace Depra.Random.Extensions
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in array.</typeparam>
         /// <returns>Random <see cref="T"/>.</returns>
-        public static T RandomElement<T>(this IList<T> elements, IRandomizer<int> randomizer)
+        public static T RandomElement<T>(this IList<T> elements, INumberRandomizer<int> randomizer)
         {
             return elements.Count == 0
                 ? default

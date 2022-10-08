@@ -28,6 +28,6 @@ namespace Depra.Random.Benchmarks
         public int ManualRandomInRange() => new global::System.Random().Next(int.MinValue, int.MaxValue);
 
         [Benchmark]
-        public int DepraRandomInRange() => _randomService.GetRandomizer<int>().Next(int.MinValue, int.MaxValue);
+        public int DepraRandomInRange() => _randomService.GetNumberRandomizer<int>().Next(int.MinValue, int.MaxValue);
     }
 }
