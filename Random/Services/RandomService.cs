@@ -4,12 +4,33 @@ using Depra.Random.Randomizers;
 
 namespace Depra.Random.Services
 {
-    public sealed class RandomService : RandomizerProvider, IRandomService
+    public sealed class RandomService : IRandomService
     {
-        public T GetSingle<T>() => GetRandomizer<T>().Next();
+        private readonly IDictionary<Type, object> _randomizers;
+        
+        public IRandomizer<T> GetRandomizer<T>()
+        {
+            if (_randomizers.TryGetValue(typeof(T), out var valueProvider) == false)
+            {
+                throw new ArgumentException();
+            }
 
-        public T Range<T>(T min, T max) => GetRandomizer<T>().Next(min, max);
+            var typedValueProvider = (IRandomizer<T>) valueProvider;
+            return typedValueProvider;
+        }
+        
+        public void RegisterRandomizer<T>(IRandomizer<T> valueProvider)
+        {
+            var valueType = typeof(T);
+            if (_randomizers.ContainsKey(valueType))
+            {
+                throw new ArgumentException($"Random value provider for {valueType} already registered!");
+            }
 
-        public RandomService(IDictionary<Type, object> randomizers) : base(randomizers) { }
+            _randomizers[valueType] = valueProvider;
+        }
+        
+        public RandomService(IDictionary<Type, object> randomizers = null) =>
+            _randomizers = randomizers ?? new Dictionary<Type, object>();
     }
 }
