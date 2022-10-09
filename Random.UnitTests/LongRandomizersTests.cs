@@ -9,22 +9,22 @@ using NUnit.Framework;
 namespace Depra.Random.UnitTests
 {
     [TestFixture]
-    public class NumberRandomizerTests
+    public class LongRandomizersTests
     {
-        private static IEnumerable<INumberRandomizer<int>> GetIntRandomizers()
+        private static IEnumerable<INumberRandomizer<long>> GetLongRandomizers()
         {
             yield return new SystemRandomizers(() => new global::System.Random());
             yield return new SystemRandomizers(() => new ThreadSafeRandom());
         }
 
         [Test]
-        public void WhenGettingRandomValueInRange_AndValueIsInteger_ThenResultInGivenRange(
-            [ValueSource(nameof(GetIntRandomizers))]
-            INumberRandomizer<int> randomizer)
+        public void WhenGettingRandomValue_AndRangingFromZeroToOneHundred_ThenResultInGivenRange(
+            [ValueSource(nameof(GetLongRandomizers))]
+            INumberRandomizer<long> randomizer)
         {
             // Arrange.
-            const int minValue = 0;
-            const int maxValue = 100;
+            const long minValue = 0_0L;
+            const long maxValue = 100_0L;
 
             // Act.
             var randomValue = randomizer.Next(minValue, maxValue);
@@ -35,13 +35,13 @@ namespace Depra.Random.UnitTests
         }
 
         [Test]
-        public void WhenGettingOneThousandRandomValues_AndValuesTypeIsInteger_ThenNoDuplicateValuesFound(
-            [ValueSource(nameof(GetIntRandomizers))]
-            INumberRandomizer<int> randomizer)
+        public void WhenGettingOneThousandRandomValues_ThenNoDuplicateValuesFound(
+            [ValueSource(nameof(GetLongRandomizers))]
+            INumberRandomizer<long> randomizer)
         {
             // Arrange.
             const int valuesCount = 1000;
-            var randomValues = new int[valuesCount];
+            var randomValues = new long[valuesCount];
 
             // Act.
             for (var i = 0; i < randomValues.Length; i++)
@@ -55,12 +55,12 @@ namespace Depra.Random.UnitTests
         }
 
         [Test]
-        public async Task WhenAsyncGettingRandomValue_AndValueTypeIsInteger_ThenResultIsNotZero(
-            [ValueSource(nameof(GetIntRandomizers))]
-            INumberRandomizer<int> randomizer)
+        public async Task WhenAsyncGettingRandomValue_ThenResultIsNotZeroOrNaN(
+            [ValueSource(nameof(GetLongRandomizers))]
+            INumberRandomizer<long> randomizer)
         {
             // Arrange.
-            const int zero = 0;
+            const long zero = 0;
 
             // Act.
             var randomValue = await randomizer.NextAsync();
@@ -71,13 +71,13 @@ namespace Depra.Random.UnitTests
         }
 
         [Test]
-        public async Task WhenAsyncGettingRandomValueInRange_AndValueTypeIsInteger_ThenResultInGivenRange(
-            [ValueSource(nameof(GetIntRandomizers))]
-            INumberRandomizer<int> randomizer)
+        public async Task WhenAsyncGettingRandomValue_AndRangingFromZeroToOneHundred_ThenResultInGivenRange(
+            [ValueSource(nameof(GetLongRandomizers))]
+            INumberRandomizer<long> randomizer)
         {
             // Arrange.
-            const int minValue = 0;
-            const int maxValue = 100;
+            const long minValue = 0_0L;
+            const long maxValue = 100_0L;
 
             // Act.
             var randomValue = await randomizer.NextAsync(minValue, maxValue);
