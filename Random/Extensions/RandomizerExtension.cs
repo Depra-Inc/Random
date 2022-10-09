@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Depra.Random.Randomizers;
 
 namespace Depra.Random.Extensions
@@ -8,6 +9,9 @@ namespace Depra.Random.Extensions
     /// </summary>
     public static class RandomizerExtension
     {
+        public static async Task<T> NextAsync<T>(this IRandomizer<T> randomizer) =>
+            await Task.Run(randomizer.Next).ConfigureAwait(false);
+
         /// <summary>
         /// <see href="https://stackoverflow.com/questions/218060/random-gaussian-variables">source</see>
         /// </summary>
