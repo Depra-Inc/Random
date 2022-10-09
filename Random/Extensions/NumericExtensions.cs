@@ -1,16 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace Depra.Random.Extensions
 {
     public static class NumericExtensions
     {
-        /// <summary>
-        /// Determines if a <see cref="Type"/> is numeric.
-        /// </summary>
-        /// <param name="type">Object type.</param>
-        /// <returns>Type is numeric.</returns>
         public static bool IsNumericType(this Type type)
-        {   
+        {
             switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Byte:
