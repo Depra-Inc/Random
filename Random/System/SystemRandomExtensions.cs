@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -5,19 +6,51 @@ namespace Depra.Random.System
 {
     public static class SystemRandomExtensions
     {
-        public static long NextLong(this global::System.Random random, long minInclusive = long.MinValue,
+        /// <summary>
+        /// Returns a random <see cref="long"/> from min (inclusive) to max (exclusive).
+        /// </summary>
+        /// <param name="random">The given random instance.</param>
+        /// <param name="minInclusive">The inclusive minimum bound.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than min.</param>
+        public static long NextLong(this global::System.Random random, long minInclusive = 0,
             long maxExclusive = long.MaxValue)
         {
-            var result = (long) random.Next((int) (minInclusive >> 32), (int) (maxExclusive >> 32));
-            result <<= 32;
-            result |= (uint) random.Next((int) minInclusive, (int) maxExclusive);
+            if (maxExclusive <= minInclusive)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive), "Max must be > min!");
+            }
 
-            return result;
+            // Working with ulong so that modulo works correctly with values > long.MaxValue.
+            var uRange = (ulong) (maxExclusive - minInclusive);
+
+            // Prevent a modulo bias; see https://stackoverflow.com/a/10984975/238419 for more information.
+            // In the worst case, the expected number of calls is 2 (though usually it's
+            // much closer to 1) so this loop doesn't really hurt performance at all.
+            ulong ulongRand;
+            do
+            {
+                var buffer = new byte[8];
+                random.NextBytes(buffer);
+                ulongRand = (ulong) BitConverter.ToInt64(buffer, 0);
+            } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
+
+            return (long) (ulongRand % uRange) + minInclusive;
         }
 
+        /// <summary>
+        /// Returns a random <see cref="double"/> from min (inclusive) to max (exclusive).
+        /// </summary>
+        /// <param name="random">The given random instance.</param>
+        /// <param name="minInclusive">The inclusive minimum bound.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than min.</param>
         public static double NextDouble(this global::System.Random random, double minInclusive = double.MinValue,
             double maxExclusive = double.MaxValue)
         {
+            if (maxExclusive <= minInclusive)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxExclusive), "Max must be > min!");
+            }
+
             return random.NextDouble() * (maxExclusive - minInclusive) + minInclusive;
         }
 
