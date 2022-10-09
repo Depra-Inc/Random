@@ -1,5 +1,6 @@
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Depra.Random.Extensions;
 using Depra.Random.Randomizers;
 using Depra.Random.System;
 using FluentAssertions;
@@ -27,9 +28,7 @@ namespace Depra.Random.UnitTests
 
             // Act.
             var randomValue = randomizer.Next(minValue, maxValue);
-            Console.WriteLine($"minInclusive: {minValue}\n" +
-                              $"random: {randomValue}\n" +
-                              $"maxExclusive: {maxValue}");
+            Helper.PrintRandomizeResult(randomValue, minValue, maxValue);
 
             // Assert.
             randomValue.Should().BeInRange(minValue, maxValue);
@@ -47,11 +46,44 @@ namespace Depra.Random.UnitTests
             for (var i = 0; i < randomValues.Length; i++)
             {
                 randomValues[i] = randomizer.Next();
-                Console.WriteLine(randomValues[i]);
+                Helper.PrintRandomizeResult(randomValues[i]);
             }
 
             // Assert.
             randomValues.Should().OnlyHaveUniqueItems();
+        }
+
+        [Test]
+        public async Task WhenAsyncGettingRandomValue_AndValueTypeIsInteger_ThenResultIsNotZero(
+            [ValueSource(nameof(CreateIntRandomizers))]
+            INumberRandomizer<int> randomizer)
+        {
+            // Arrange.
+            const int zero = 0;
+
+            // Act.
+            var randomValue = await randomizer.NextAsync();
+            Helper.PrintRandomizeResult(randomValue);
+
+            // Assert.
+            randomValue.Should().NotBe(zero);
+        }
+
+        [Test]
+        public async Task WhenAsyncGettingRandomValueInRange_AndValueTypeIsInteger_ThenResultInGivenRange(
+            [ValueSource(nameof(CreateIntRandomizers))]
+            INumberRandomizer<int> randomizer)
+        {
+            // Arrange.
+            const int minValue = 0;
+            const int maxValue = 100;
+
+            // Act.
+            var randomValue = await randomizer.NextAsync(minValue, maxValue);
+            Helper.PrintRandomizeResult(randomValue, minValue, maxValue);
+            
+            // Assert.
+            randomValue.Should().BeInRange(minValue, maxValue);
         }
     }
 }
