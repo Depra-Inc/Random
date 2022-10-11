@@ -1,6 +1,6 @@
 using System;
 
-namespace Depra.Random.UnitTests
+namespace Depra.Random.UnitTests.Internal
 {
     internal static class Helper
     {

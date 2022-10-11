@@ -1,4 +1,5 @@
 using System;
+using Depra.Random.Internal.Exceptions;
 using Depra.Random.Randomizers;
 using Depra.Random.Services;
 using FluentAssertions;
@@ -20,7 +21,7 @@ namespace Depra.Random.UnitTests
             Action act = () => randomService.GetRandomizer<int>();
 
             // Assert.
-            act.Should().Throw<ArgumentException>();
+            act.Should().Throw<NoRegistrationException>();
         }
 
         [Test]

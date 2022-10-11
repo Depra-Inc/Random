@@ -5,9 +5,9 @@
 
         <IsPackable>false</IsPackable>
 
-        <AssemblyName>Depra.Random.UnitTests</AssemblyName>
-
         <RootNamespace>Depra.Random.UnitTests</RootNamespace>
+
+        <AssemblyName>Depra.Random.UnitTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
