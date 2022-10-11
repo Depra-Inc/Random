@@ -4,132 +4,8 @@ using Depra.Random.Internal.Exceptions;
 
 namespace Depra.Random.System
 {
-    public static class SystemRandomNumericExtensions
+    public static class SystemRandomIntegerExtensions
     {
-        #region Double
-
-        /// <summary>
-        /// Returns a random <see cref="double"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <param name="minInclusive">The inclusive minimum bound.</param>
-        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
-        /// <returns>A <see cref="double"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static double NextDouble(this global::System.Random random, double minInclusive = 0.0,
-            double maxExclusive = double.MaxValue)
-        {
-            if (minInclusive > maxExclusive)
-            {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
-            }
-
-            var sample = random.NextDouble();
-            return maxExclusive * sample + minInclusive * (1d - sample);
-        }
-
-        #endregion
-
-        #region Float
-
-        /// <summary>
-        /// Returns a random floating-point number that is greater than or equal to 0.0f, and less than 1.0f.
-        /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
-        /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to 0.0f, and less than 1.0f.</returns>
-        public static float NextFloat(this global::System.Random rand) => (float) rand.NextDouble();
-
-        /// <summary>
-        /// Returns a random floating-point number that is greater than or equal to minValue, and less than maxValue.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <param name="minInclusive">The inclusive minimum bound.</param>
-        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
-        /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static float NextFloat(this global::System.Random random, float minInclusive,
-            float maxExclusive = float.MaxValue)
-        {
-            if (minInclusive > maxExclusive)
-            {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
-            }
-
-            return (float) random.NextDouble(minInclusive, maxExclusive);
-        }
-
-        #endregion
-
-        #region Decimal
-
-        /// <summary>
-        /// Returns a random <see cref="decimal"/> that is greater than or equal to 0.0m, and less than 1.0m.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <returns>A <see cref="decimal"/> number that is greater than or equal to 0.0m, and less than 1.0m.</returns>
-        public static decimal NextDecimal(this global::System.Random random)
-        {
-            var values = Enumerable.Range(0, 29).Select(x => random.Next(10).ToString());
-            var result = decimal.Parse($"0.{string.Join(string.Empty, values)}");
-
-            return result / 1.000000000000000000000000000000000m;
-        }
-
-        /// <summary>
-        /// Returns a random <see cref="decimal"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <param name="minInclusive">The inclusive minimum bound.</param>
-        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
-        /// <returns>A <see cref="decimal"/> number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static decimal NextDecimal(this global::System.Random random, decimal minInclusive, decimal maxExclusive)
-        {
-            if (minInclusive > maxExclusive)
-            {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
-            }
-
-            return random.NextDecimal() * (maxExclusive - minInclusive) + minInclusive;
-        }
-
-        #endregion
-
-        #region Byte
-
-        /// <summary>
-        /// Returns a random <see cref="byte"/> that is less than the specified maximum.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <param name="maxExclusive">The exclusive upper bound of the random number returned. <see cref="maxExclusive"/> must be greater than or equal to 0.</param>
-        /// <returns>
-        /// A 8-bit unsigned integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
-        /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
-        /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
-        /// </returns>
-        public static byte NextByte(this global::System.Random random, byte maxExclusive = byte.MaxValue) =>
-            (byte) random.Next(maxExclusive);
-
-        /// <summary>
-        /// Returns a random <see cref="byte"/> that is within a specified range.
-        /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
-        /// <param name="minInclusive">The inclusive minimum bound.</param>
-        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
-        /// <returns>
-        /// A 8-bit unsigned integer greater than or equal to <see cref="minInclusive"/> and less than <see cref="maxExclusive"/>.
-        /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
-        /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
-        /// </returns>
-        public static byte NextByte(this global::System.Random rand, byte minInclusive, byte maxExclusive)
-        {
-            if (minInclusive > maxExclusive)
-            {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
-            }
-
-            return (byte) rand.Next(minInclusive, maxExclusive);
-        }
-
-        #endregion
-
         #region SByte
 
         /// <summary>
@@ -181,7 +57,45 @@ namespace Depra.Random.System
         }
 
         #endregion
+        
+        #region Byte
 
+        /// <summary>
+        /// Returns a random <see cref="byte"/> that is less than the specified maximum.
+        /// </summary>
+        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="maxExclusive">The exclusive upper bound of the random number returned. <see cref="maxExclusive"/> must be greater than or equal to 0.</param>
+        /// <returns>
+        /// A 8-bit unsigned integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
+        /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
+        /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
+        /// </returns>
+        public static byte NextByte(this global::System.Random random, byte maxExclusive = byte.MaxValue) =>
+            (byte) random.Next(maxExclusive);
+
+        /// <summary>
+        /// Returns a random <see cref="byte"/> that is within a specified range.
+        /// </summary>
+        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <param name="minInclusive">The inclusive minimum bound.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
+        /// <returns>
+        /// A 8-bit unsigned integer greater than or equal to <see cref="minInclusive"/> and less than <see cref="maxExclusive"/>.
+        /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
+        /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
+        /// </returns>
+        public static byte NextByte(this global::System.Random rand, byte minInclusive, byte maxExclusive)
+        {
+            if (minInclusive > maxExclusive)
+            {
+                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+            }
+
+            return (byte) rand.Next(minInclusive, maxExclusive);
+        }
+
+        #endregion
+        
         #region Short
 
         /// <summary>
@@ -344,54 +258,55 @@ namespace Depra.Random.System
         }
 
         #endregion
-
-        #region ULong
-
-        /// <summary>
-        /// Returns a random <see cref="ulong"/>.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random)
-        {
-            var buffer = new byte[8];
-            random.NextBytes(buffer);
-
-            return BitConverter.ToUInt64(buffer, 0);
-        }
+        
+        #region Double
 
         /// <summary>
-        /// Returns a random <see cref="ulong"/> that is less than the specified maximum.
-        /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
-        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to 0.</param>
-        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random, ulong maxExclusive) =>
-            random.NextULong(ulong.MinValue, maxExclusive);
-
-        /// <summary>
-        /// Returns a random <see cref="ulong"/> that is within a specified range.
+        /// Returns a random <see cref="double"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
         /// </summary>
         /// <param name="random">The given <see cref="Random"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
-        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random, ulong minInclusive, ulong maxExclusive)
+        /// <returns>A <see cref="double"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
+        public static double NextDouble(this global::System.Random random, double minInclusive = 0.0,
+            double maxExclusive = double.MaxValue)
         {
-            var uRange = maxExclusive - minInclusive;
-            if (uRange <= 0)
+            if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(uRange, 0, true);
+                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
             }
 
-            var limit = ulong.MaxValue - ulong.MaxValue % uRange;
-            ulong ulongRand;
-            do
-            {
-                ulongRand = random.NextULong();
-            } while (ulongRand > limit);
+            var sample = random.NextDouble();
+            return maxExclusive * sample + minInclusive * (1d - sample);
+        }
 
-            return ulongRand % uRange + minInclusive;
+        #endregion
+
+        #region Float
+
+        /// <summary>
+        /// Returns a random floating-point number that is greater than or equal to 0.0f, and less than 1.0f.
+        /// </summary>
+        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to 0.0f, and less than 1.0f.</returns>
+        public static float NextFloat(this global::System.Random rand) => (float) rand.NextDouble();
+
+        /// <summary>
+        /// Returns a random floating-point number that is greater than or equal to minValue, and less than maxValue.
+        /// </summary>
+        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="minInclusive">The inclusive minimum bound.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
+        /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
+        public static float NextFloat(this global::System.Random random, float minInclusive,
+            float maxExclusive = float.MaxValue)
+        {
+            if (minInclusive > maxExclusive)
+            {
+                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+            }
+
+            return (float) random.NextDouble(minInclusive, maxExclusive);
         }
 
         #endregion
@@ -449,6 +364,57 @@ namespace Depra.Random.System
             } while (ulongRand > limit);
 
             return (long) (ulongRand % uRange) + minInclusive;
+        }
+
+        #endregion
+        
+        #region ULong
+
+        /// <summary>
+        /// Returns a random <see cref="ulong"/>.
+        /// </summary>
+        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
+        public static ulong NextULong(this global::System.Random random)
+        {
+            var buffer = new byte[8];
+            random.NextBytes(buffer);
+
+            return BitConverter.ToUInt64(buffer, 0);
+        }
+
+        /// <summary>
+        /// Returns a random <see cref="ulong"/> that is less than the specified maximum.
+        /// </summary>
+        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to 0.</param>
+        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
+        public static ulong NextULong(this global::System.Random random, ulong maxExclusive) =>
+            random.NextULong(ulong.MinValue, maxExclusive);
+
+        /// <summary>
+        /// Returns a random <see cref="ulong"/> that is within a specified range.
+        /// </summary>
+        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="minInclusive">The inclusive minimum bound.</param>
+        /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
+        /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
+        public static ulong NextULong(this global::System.Random random, ulong minInclusive, ulong maxExclusive)
+        {
+            var uRange = maxExclusive - minInclusive;
+            if (uRange <= 0)
+            {
+                throw new RandomArgumentOutOfRangeException(uRange, 0, true);
+            }
+
+            var limit = ulong.MaxValue - ulong.MaxValue % uRange;
+            ulong ulongRand;
+            do
+            {
+                ulongRand = random.NextULong();
+            } while (ulongRand > limit);
+
+            return ulongRand % uRange + minInclusive;
         }
 
         #endregion
