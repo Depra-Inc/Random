@@ -15,7 +15,7 @@ namespace Depra.Random.System
             _randomizerFactory = new RandomizerFactory(randomFactory);
 
         public IRandomizer GetRandomizer(Type valueType) => _randomizerFactory.GetRandomizer(valueType);
-        
+
         public IEnumerable<IRandomizer> GetAllRandomizers() => _randomizerFactory.GetAllRandomizers();
 
         private abstract class Helper
@@ -37,18 +37,24 @@ namespace Depra.Random.System
                         return new SByteRandomizer(GetRandom);
                     case TypeCode.Byte:
                         return new ByteRandomizer(GetRandom);
-                    case TypeCode.Decimal:
-                        return new DecimalRandomizer(GetRandom);
                     case TypeCode.Int16:
-                        return new UIntRandomizer(GetRandom);
+                        return new ShortRandomizer(GetRandom);
+                    case TypeCode.UInt16:
+                        return new UShortRandomizer(GetRandom);
                     case TypeCode.Int32:
                         return new IntRandomizer(GetRandom);
+                    case TypeCode.UInt32:
+                        return new UIntRandomizer(GetRandom);
                     case TypeCode.Int64:
                         return new LongRandomizer(GetRandom);
+                    case TypeCode.UInt64:
+                        return new ULongRandomizer(GetRandom);
                     case TypeCode.Single:
                         return new FloatRandomizer(GetRandom);
                     case TypeCode.Double:
                         return new DoubleRandomizer(GetRandom);
+                    case TypeCode.Decimal:
+                        return new DecimalRandomizer(GetRandom);
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -58,18 +64,21 @@ namespace Depra.Random.System
             {
                 yield return new SByteRandomizer(GetRandom);
                 yield return new ByteRandomizer(GetRandom);
-                yield return new DecimalRandomizer(GetRandom);
-                yield return new UIntRandomizer(GetRandom);
+                yield return new ShortRandomizer(GetRandom);
+                yield return new UShortRandomizer(GetRandom);
                 yield return new IntRandomizer(GetRandom);
+                yield return new UIntRandomizer(GetRandom);
                 yield return new LongRandomizer(GetRandom);
+                yield return new ULongRandomizer(GetRandom);
                 yield return new FloatRandomizer(GetRandom);
                 yield return new DoubleRandomizer(GetRandom);
+                yield return new DecimalRandomizer(GetRandom);
             }
 
             public RandomizerFactory(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class SByteRandomizer : Helper, IRandomizer<sbyte>
+        private class SByteRandomizer : Helper, ISignedNumberRandomizer<sbyte>
         {
             private static readonly Type VALUE_TYPE = typeof(sbyte);
 
@@ -77,10 +86,17 @@ namespace Depra.Random.System
 
             public sbyte Next() => GetRandom().NextSByte();
 
+            public sbyte Next(sbyte minInclusive, sbyte maxExclusive) =>
+                GetRandom().NextSByte(minInclusive, maxExclusive);
+
+            public sbyte NextPositive(sbyte maxExclusive) => GetRandom().NextSByte(1, maxExclusive);
+
+            public sbyte NextNegative(sbyte minInclusive) => GetRandom().NextSByte(minInclusive, -1);
+
             public SByteRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class ByteRandomizer : Helper, IRandomizer<byte>
+        private class ByteRandomizer : Helper, INumberRandomizer<byte>
         {
             private static readonly Type VALUE_TYPE = typeof(byte);
 
@@ -88,28 +104,49 @@ namespace Depra.Random.System
 
             public byte Next() => GetRandom().NextByte();
 
+            public byte Next(byte minInclusive, byte maxExclusive) => 
+                GetRandom().NextByte(minInclusive, maxExclusive);
+
+            public byte NextPositive(byte maxExclusive) => GetRandom().NextByte(1, maxExclusive);
+
             public ByteRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class DecimalRandomizer : Helper, INumberRandomizer<decimal>
+        private class ShortRandomizer : Helper, ISignedNumberRandomizer<short>
         {
-            private static readonly Type VALUE_TYPE = typeof(decimal);
+            private static readonly Type VALUE_TYPE = typeof(uint);
 
             public Type ValueType => VALUE_TYPE;
 
-            public decimal Next() => GetRandom().NextDecimal();
+            public short Next() => GetRandom().NextShort();
 
-            public decimal Next(decimal minInclusive, decimal maxExclusive) =>
-                GetRandom().NextDecimal(minInclusive, maxExclusive);
+            public short Next(short minInclusive, short maxExclusive) =>
+                GetRandom().NextShort(minInclusive, maxExclusive);
 
-            public decimal NextPositive(decimal maxExclusive) => GetRandom().NextDecimal(1, maxExclusive);
+            public short NextPositive(short maxExclusive) => GetRandom().NextShort(1, maxExclusive);
 
-            public decimal NextNegative(decimal minInclusive) => GetRandom().NextDecimal(minInclusive, -1);
+            public short NextNegative(short minInclusive) => GetRandom().NextShort(minInclusive, -1);
 
-            public DecimalRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+            public ShortRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class IntRandomizer : Helper, INumberRandomizer<int>
+        private class UShortRandomizer : Helper, INumberRandomizer<ushort>
+        {
+            private static readonly Type VALUE_TYPE = typeof(ushort);
+
+            public Type ValueType => VALUE_TYPE;
+
+            public ushort Next() => GetRandom().NextUShort();
+
+            public ushort Next(ushort minInclusive, ushort maxExclusive) =>
+                GetRandom().NextUShort(minInclusive, maxExclusive);
+
+            public ushort NextPositive(ushort maxExclusive) => GetRandom().NextUShort(1, maxExclusive);
+
+            public UShortRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class IntRandomizer : Helper, ISignedNumberRandomizer<int>
         {
             private static readonly Type VALUE_TYPE = typeof(int);
 
@@ -140,15 +177,26 @@ namespace Depra.Random.System
 
             public uint NextPositive(uint maxExclusive) => GetRandom().NextUInt(1, maxExclusive);
 
-            public uint NextNegative(uint minInclusive)
-            {
-                throw new NullReferenceException();
-            }
-
             public UIntRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class LongRandomizer : Helper, INumberRandomizer<long>
+        private class ULongRandomizer : Helper, INumberRandomizer<ulong>
+        {
+            private static readonly Type VALUE_TYPE = typeof(ulong);
+
+            public Type ValueType => VALUE_TYPE;
+
+            public ulong Next() => GetRandom().NextULong();
+
+            public ulong Next(ulong minInclusive, ulong maxExclusive) =>
+                GetRandom().NextULong(minInclusive, maxExclusive);
+
+            public ulong NextPositive(ulong maxExclusive) => GetRandom().NextULong(maxExclusive);
+
+            public ULongRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class LongRandomizer : Helper, ISignedNumberRandomizer<long>
         {
             private static readonly Type VALUE_TYPE = typeof(long);
 
@@ -166,7 +214,7 @@ namespace Depra.Random.System
             public LongRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class FloatRandomizer : Helper, INumberRandomizer<float>
+        private class FloatRandomizer : Helper, ISignedNumberRandomizer<float>
         {
             private static readonly Type VALUE_TYPE = typeof(float);
 
@@ -184,7 +232,7 @@ namespace Depra.Random.System
             public FloatRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class DoubleRandomizer : Helper, INumberRandomizer<double>
+        private class DoubleRandomizer : Helper, ISignedNumberRandomizer<double>
         {
             private static readonly Type VALUE_TYPE = typeof(double);
 
@@ -202,28 +250,22 @@ namespace Depra.Random.System
             public DoubleRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
-        private class BytesRandomizer : Helper
+        private class DecimalRandomizer : Helper, ISignedNumberRandomizer<decimal>
         {
-            public void Next(byte[] buffer) => GetRandom().NextBytes(buffer);
+            private static readonly Type VALUE_TYPE = typeof(decimal);
 
-            public BytesRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
-        }
+            public Type ValueType => VALUE_TYPE;
 
-        private class CharsRandomizer : Helper
-        {
-            public void Next(char[] buffer) => GetRandom().NextChars(buffer);
+            public decimal Next() => GetRandom().NextDecimal();
 
-            public IEnumerable<char> Next(int count, bool includeLowerCase) =>
-                GetRandom().NextChars(count, includeLowerCase);
+            public decimal Next(decimal minInclusive, decimal maxExclusive) =>
+                GetRandom().NextDecimal(minInclusive, maxExclusive);
 
-            public CharsRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
-        }
+            public decimal NextPositive(decimal maxExclusive) => GetRandom().NextDecimal(1, maxExclusive);
 
-        private class StringRandomizer : Helper
-        {
-            public string Next(int count, bool includeLowerCase) => GetRandom().NextString(count, includeLowerCase);
+            public decimal NextNegative(decimal minInclusive) => GetRandom().NextDecimal(minInclusive, -1);
 
-            public StringRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+            public DecimalRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
     }
 }

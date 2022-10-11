@@ -5,7 +5,5 @@ namespace Depra.Random.Randomizers
         T Next(T minInclusive, T maxExclusive);
         
         T NextPositive(T maxExclusive);
-
-        T NextNegative(T minInclusive);
     }
 }

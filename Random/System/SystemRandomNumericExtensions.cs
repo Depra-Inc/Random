@@ -23,7 +23,8 @@ namespace Depra.Random.System
                 throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
             }
 
-            return random.NextDouble() * (maxExclusive - minInclusive) + minInclusive;
+            var sample = random.NextDouble();
+            return maxExclusive * sample + minInclusive * (1d - sample);
         }
 
         #endregion
