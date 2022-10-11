@@ -114,7 +114,7 @@ namespace Depra.Random.System
 
         private class ShortRandomizer : Helper, ISignedNumberRandomizer<short>
         {
-            private static readonly Type VALUE_TYPE = typeof(uint);
+            private static readonly Type VALUE_TYPE = typeof(short);
 
             public Type ValueType => VALUE_TYPE;
 
