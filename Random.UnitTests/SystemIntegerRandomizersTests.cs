@@ -21,14 +21,13 @@ namespace Depra.Random.UnitTests
     [TestFixture(ulong.MinValue, ulong.MaxValue, ulong.MinValue + ulong.MaxValue, TypeArgs = new[] {typeof(ulong)})]
     [TestFixture(float.MinValue, float.MaxValue, float.MinValue + float.MaxValue, TypeArgs = new[] {typeof(float)})]
     [TestFixture(double.MinValue, double.MaxValue, double.MinValue + double.MaxValue, TypeArgs = new[] {typeof(double)})]
-    //[TestFixture(decimal.MinValue, decimal.MaxValue, TypeArgs = new []{typeof(decimal)})]
-    public class SystemNumberRandomizersTests<T> where T : IComparable<T>
+    public class SystemIntegerRandomizersTests<T> where T : IComparable<T>
     {
         private readonly T _minValue;
         private readonly T _maxValue;
         private readonly double _numberOfPossibleValues;
 
-        public SystemNumberRandomizersTests(T minValue, T maxValue, double numberOfPossibleValues)
+        public SystemIntegerRandomizersTests(T minValue, T maxValue, double numberOfPossibleValues)
         {
             _minValue = minValue;
             _maxValue = maxValue;

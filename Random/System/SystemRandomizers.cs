@@ -33,6 +33,8 @@ namespace Depra.Random.System
             {
                 switch (Type.GetTypeCode(type))
                 {
+                    case TypeCode.Boolean:
+                        return new BooleanRandomizer(GetRandom);
                     case TypeCode.SByte:
                         return new SByteRandomizer(GetRandom);
                     case TypeCode.Byte:
@@ -62,6 +64,7 @@ namespace Depra.Random.System
 
             public IEnumerable<IRandomizer> GetAllRandomizers()
             {
+                yield return new BooleanRandomizer(GetRandom);
                 yield return new SByteRandomizer(GetRandom);
                 yield return new ByteRandomizer(GetRandom);
                 yield return new ShortRandomizer(GetRandom);
@@ -76,6 +79,17 @@ namespace Depra.Random.System
             }
 
             public RandomizerFactory(Func<global::System.Random> randomFactory) : base(randomFactory) { }
+        }
+
+        private class BooleanRandomizer : Helper, IRandomizer<bool>
+        {
+            private static readonly Type VALUE_TYPE = typeof(bool);
+
+            public Type ValueType => VALUE_TYPE;
+
+            public bool Next() => GetRandom().NextBoolean();
+
+            public BooleanRandomizer(Func<global::System.Random> randomFactory) : base(randomFactory) { }
         }
 
         private class SByteRandomizer : Helper, ISignedNumberRandomizer<sbyte>
