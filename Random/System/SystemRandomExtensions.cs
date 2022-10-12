@@ -490,7 +490,7 @@ namespace Depra.Random.System
         #endregion
 
         #region Chars
-        
+
         public static void NextChars(this global::System.Random random, char[] buffer)
         {
             for (var i = 0; i < buffer.Length; ++i)
@@ -511,7 +511,7 @@ namespace Depra.Random.System
 
             return result;
         }
-        
+
         #endregion
     }
 }

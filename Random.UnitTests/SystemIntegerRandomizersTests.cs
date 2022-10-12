@@ -10,27 +10,25 @@ using NUnit.Framework;
 
 namespace Depra.Random.UnitTests
 {
-    [TestFixture(sbyte.MinValue, sbyte.MaxValue, sbyte.MinValue + sbyte.MaxValue, TypeArgs = new[] { typeof(sbyte) })]
-    [TestFixture(byte.MinValue, byte.MaxValue, byte.MinValue + byte.MaxValue, TypeArgs = new[] { typeof(byte) })]
-    [TestFixture(short.MinValue, short.MaxValue, short.MinValue + short.MaxValue, TypeArgs = new[] { typeof(short) })]
-    [TestFixture(ushort.MinValue, ushort.MaxValue, ushort.MinValue + ushort.MaxValue, TypeArgs = new[] { typeof(ushort) })]
-    [TestFixture(int.MinValue, int.MaxValue, int.MinValue + int.MaxValue, TypeArgs = new[] { typeof(int) })]
-    [TestFixture(uint.MinValue, uint.MaxValue, uint.MinValue + uint.MaxValue, TypeArgs = new[] { typeof(uint) })]
-    [TestFixture(long.MinValue, long.MaxValue, long.MinValue + long.MaxValue, TypeArgs = new[] { typeof(long) })]
-    [TestFixture(ulong.MinValue, ulong.MaxValue, ulong.MinValue + ulong.MaxValue, TypeArgs = new[] { typeof(ulong) })]
-    [TestFixture(float.MinValue, float.MaxValue, float.MinValue + float.MaxValue, TypeArgs = new[] { typeof(float) })]
-    [TestFixture(double.MinValue, double.MaxValue, double.MinValue + double.MaxValue, TypeArgs = new[] { typeof(double) })]
+    [TestFixture(sbyte.MinValue, sbyte.MaxValue, TypeArgs = new[] {typeof(sbyte)})]
+    [TestFixture(byte.MinValue, byte.MaxValue, TypeArgs = new[] {typeof(byte)})]
+    [TestFixture(short.MinValue, short.MaxValue, TypeArgs = new[] {typeof(short)})]
+    [TestFixture(ushort.MinValue, ushort.MaxValue, TypeArgs = new[] {typeof(ushort)})]
+    [TestFixture(int.MinValue, int.MaxValue, TypeArgs = new[] {typeof(int)})]
+    [TestFixture(uint.MinValue, uint.MaxValue, TypeArgs = new[] {typeof(uint)})]
+    [TestFixture(long.MinValue, long.MaxValue, TypeArgs = new[] {typeof(long)})]
+    [TestFixture(ulong.MinValue, ulong.MaxValue, TypeArgs = new[] {typeof(ulong)})]
+    [TestFixture(float.MinValue, float.MaxValue, TypeArgs = new[] {typeof(float)})]
+    [TestFixture(double.MinValue, double.MaxValue, TypeArgs = new[] {typeof(double)})]
     public class SystemIntegerRandomizersTests<T> where T : IComparable<T>
     {
         private readonly T _minValue;
         private readonly T _maxValue;
-        private readonly double _numberOfPossibleValues;
 
-        public SystemIntegerRandomizersTests(T minValue, T maxValue, double numberOfPossibleValues)
+        public SystemIntegerRandomizersTests(T minValue, T maxValue)
         {
             _minValue = minValue;
             _maxValue = maxValue;
-            _numberOfPossibleValues = numberOfPossibleValues;
         }
 
         private static IEnumerable<INumberRandomizer<T>> GetRandomizers()

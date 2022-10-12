@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Depra.Random.Internal.Exceptions;
 
 namespace Depra.Random.System
@@ -35,7 +36,7 @@ namespace Depra.Random.System
                 ? minInclusive + GetRandomUInt32(random, maxExclusive - minInclusive)
                 : maxExclusive + GetRandomUInt32(random, minInclusive - maxExclusive);
         }
-
+        
         internal static class UInt32Randomizer
         {
             public static uint GetRandomUInt32(global::System.Random random)
