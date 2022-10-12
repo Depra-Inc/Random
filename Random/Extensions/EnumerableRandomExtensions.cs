@@ -14,7 +14,7 @@ namespace Depra.Random.Extensions
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in enumerable.</typeparam>
         /// <returns>Random <see cref="T"/>.</returns>
-        public static T RandomElement<T>(this IEnumerable<T> elements, INumberRandomizer<int> randomizer)
+        public static T GetRandomElement<T>(this IEnumerable<T> elements, INumberRandomizer<int> randomizer)
         {
             if (elements == null)
             {
@@ -30,7 +30,7 @@ namespace Depra.Random.Extensions
             return elements.ElementAt(randomIndex);
         }
 
-        public static int RandomElementCount<T>(this IReadOnlyList<T> readOnlyList, INumberRandomizer<int> randomizer,
+        public static int GetRandomElementCount<T>(this IReadOnlyList<T> readOnlyList, INumberRandomizer<int> randomizer,
             int min = 0, int max = -1)
         {
             if (max == -1)
@@ -41,17 +41,17 @@ namespace Depra.Random.Extensions
             return randomizer.Next(min, max);
         }
 
-        public static IEnumerable<T> RandomUniqueElements<T>(this IEnumerable<T> enumerable,
+        public static IEnumerable<T> GetRandomUniqueElements<T>(this IEnumerable<T> enumerable,
             INumberRandomizer<int> randomizer, int min = 0, int max = -1)
         {
             var array = enumerable.ToArray();
-            var randomElementCount = array.RandomElementCount(randomizer, min, max);
-            var result = array.RandomUniqueElementsWithCount(randomElementCount);
+            var randomElementCount = array.GetRandomElementCount(randomizer, min, max);
+            var result = array.GetRandomUniqueElementsWithCount(randomElementCount);
 
             return result;
         }
 
-        public static IEnumerable<T> RandomUniqueElementsWithCount<T>(this IEnumerable<T> enumerable, int elementCount) =>
+        public static IEnumerable<T> GetRandomUniqueElementsWithCount<T>(this IEnumerable<T> enumerable, int elementCount) =>
             enumerable.OrderBy(arg => Guid.NewGuid()).Take(elementCount);
 
         /// <summary>
