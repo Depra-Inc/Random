@@ -16,7 +16,7 @@ namespace Depra.Random.UnitTests
         private ConcurrentRandom _concurrentRandom;
 
         [SetUp]
-        public void Setup() => _concurrentRandom = new ConcurrentRandom();
+        public void SetUp() => _concurrentRandom = new ConcurrentRandom();
 
         [Test]
         public void WhenGettingRandomIntegerParallel_AndNumberOfSamplesIs1000_ThenZeroesNotFound()

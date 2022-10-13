@@ -10,10 +10,7 @@ namespace Depra.Random.UnitTests
         private global::System.Random _random;
 
         [SetUp]
-        public void Setup()
-        {
-            _random = new global::System.Random();
-        }
+        public void SetUp() => _random = new global::System.Random();
 
         [Test]
         public void WhenGettingRandomBoolean_AndProbabilityIsOne_ThenResultIsAlwaysTrue()
@@ -32,7 +29,7 @@ namespace Depra.Random.UnitTests
             // Assert.
             randomValues.Should().AllBeEquivalentTo(true);
         }
-        
+
         [Test]
         public void WhenGettingRandomBoolean_AndProbabilityIsZero_ThenResultIsAlwaysFalse()
         {

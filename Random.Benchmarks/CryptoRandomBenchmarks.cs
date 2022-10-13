@@ -10,17 +10,14 @@ namespace Depra.Random.Benchmarks
         private global::System.Random _random;
 
         [GlobalSetup]
-        public void Setup()
+        public void SetUp()
         {
             _cryptoRandom = new CryptoRandom();
             _random = new global::System.Random();
         }
 
         [GlobalCleanup]
-        public void TearDown()
-        {
-            _cryptoRandom.Dispose();
-        }
+        public void TearDown() => _cryptoRandom.Dispose();
 
         [Benchmark(Baseline = true)]
         public int Manual_GetRandomInt() => _random.Next();
