@@ -10,20 +10,81 @@ using NUnit.Framework;
 namespace Depra.Random.UnitTests
 {
     [TestFixture]
-    [TestOf(typeof(ConcurrentRandom))]
-    public class ConcurrentRandomTests
+    [TestOf(typeof(CryptoRandom))]
+    public class CryptoRandomTests
     {
-        private ConcurrentRandom _concurrentRandom;
+        private CryptoRandom _cryptoRandom;
 
         [SetUp]
-        public void Setup() => _concurrentRandom = new ConcurrentRandom();
+        public void SetUp() => _cryptoRandom = new CryptoRandom();
 
+        [TearDown]
+        public void TearDown() => _cryptoRandom.Dispose();
+        
+        [Test]
+        public void WhenGettingRandomInteger_AndNumberOfSamplesIs1000_ThenAllValuesIsUnique()
+        {
+            // Arrange.
+            const int samplesCount = 10_000;
+            var random = _cryptoRandom;
+            var numbers = new int[samplesCount];
+
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
+            {
+                numbers[i] = random.Next(int.MinValue, int.MaxValue);
+            }
+
+            // Assert.
+            numbers.Should().OnlyHaveUniqueItems();
+            
+        }
+
+        [Test]
+        public void WhenGettingRandomDouble_AndNumberOfSamplesIs1000_ThenAllValuesIsUnique()
+        {
+            // Arrange.
+            const int samplesCount = 10_000;
+            var random = _cryptoRandom;
+            var numbers = new double[samplesCount];
+
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
+            {
+                numbers[i] = random.NextDouble();
+            }
+
+            // Assert.
+            numbers.Should().OnlyHaveUniqueItems();
+        }
+
+        [Test]
+        public void WhenGettingRandomBytes_AndNumberOfSamplesIs1000_ThenAllValuesIsUnique()
+        {
+            // Arrange.
+            const int bufferLength = 8;
+            const int samplesCount = 10_000;
+            var random = _cryptoRandom;
+            var bytesStack = new Stack<byte[]>();
+
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
+            {
+                var buffer = new byte[bufferLength];
+                random.NextBytes(buffer);
+                bytesStack.Push(buffer);
+            }
+
+            // Assert.
+            bytesStack.Should().OnlyHaveUniqueItems();
+        }
+        
         [Test]
         public void WhenGettingRandomIntegerParallel_AndNumberOfSamplesIs1000_ThenZeroesNotFound()
         {
             // Arrange.
             const int samplesCount = 10_000;
-            var random = _concurrentRandom;
+            var random = new global::System.Random();
             var allThreadIssues = 0;
 
             // Act.
@@ -50,7 +111,7 @@ namespace Depra.Random.UnitTests
         {
             // Arrange.
             const int samplesCount = 10_000;
-            var random = _concurrentRandom;
+            var random = _cryptoRandom;
             var allThreadIssues = 0;
 
             // Act.
@@ -78,7 +139,7 @@ namespace Depra.Random.UnitTests
             // Arrange.
             const int bufferLength = 8;
             const int samplesCount = 10_000;
-            var random = _concurrentRandom;
+            var random = _cryptoRandom;
             var sourceBuffer = new byte[bufferLength];
             var allThreadIssues = 0;
 
