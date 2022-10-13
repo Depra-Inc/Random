@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 using Depra.Random.Extensions;
@@ -8,23 +7,25 @@ using Depra.Random.System;
 namespace Depra.Random.Benchmarks
 {
     [MemoryDiagnoser]
-    public class RandomBenchmarks
+    public class RandomizersBenchmarks
     {
+        private global::System.Random _random;
         private IRandomService _randomService;
 
         [GlobalSetup]
         public void Setup()
         {
+            _random = new global::System.Random();
             _randomService = new RandomServiceBuilder()
-                .With(new SystemRandomizers(CreateSystemRandom))
+                .With(new SystemRandomizers(() => new global::System.Random()))
                 .Build();
         }
 
         [Benchmark(Baseline = true)]
-        public int Manual_GetRandomInt() => CreateSystemRandom().Next();
+        public int Manual_GetRandomInt() => _random.Next();
 
         [Benchmark]
-        public double Manual_GetRandomDouble() => CreateSystemRandom().NextDouble();
+        public double Manual_GetRandomDouble() => _random.NextDouble();
 
         [Benchmark]
         public int Depra_GetRandomInt() => _randomService.GetRandomizer<int>().Next();
@@ -37,7 +38,7 @@ namespace Depra.Random.Benchmarks
 
         [Benchmark]
         public int Manual_GetRandomInt_Async() =>
-            Task.Run(() => CreateSystemRandom().Next())
+            Task.Run(() => _random.Next())
                 .GetAwaiter()
                 .GetResult();
 
@@ -58,8 +59,5 @@ namespace Depra.Random.Benchmarks
             _randomService.GetRandomizer<double>().NextAsync()
                 .GetAwaiter()
                 .GetResult();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static global::System.Random CreateSystemRandom() => new();
     }
 }
