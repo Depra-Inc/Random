@@ -30,7 +30,7 @@ namespace Depra.Random.System
         {
             if (maxExclusive < 0)
             {
-                throw new RandomArgumentOutOfRangeException(maxExclusive, 0);
+                Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
             return (sbyte) random.Next(maxExclusive);
@@ -51,7 +51,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return (sbyte) random.Next(minInclusive, maxExclusive);
@@ -89,7 +89,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return (byte) rand.Next(minInclusive, maxExclusive);
@@ -120,7 +120,7 @@ namespace Depra.Random.System
         {
             if (maxExclusive < 0)
             {
-                throw new RandomArgumentOutOfRangeException(maxExclusive, 0);
+                Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
             return (short) random.Next(maxExclusive);
@@ -141,7 +141,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return (short) random.Next(minInclusive, maxExclusive);
@@ -187,7 +187,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return (ushort) rand.Next(minInclusive, maxExclusive);
@@ -248,7 +248,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             var sample = random.NextDouble();
@@ -278,7 +278,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return (float) random.NextDouble(minInclusive, maxExclusive);
@@ -306,7 +306,7 @@ namespace Depra.Random.System
         {
             if (maxExclusive < 0)
             {
-                throw new RandomArgumentOutOfRangeException(maxExclusive, 0);
+                Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
             return (long) random.NextULong((ulong) maxExclusive);
@@ -323,7 +323,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             // Working with ulong so that modulo works correctly with values > long.MaxValue.
@@ -379,7 +379,7 @@ namespace Depra.Random.System
             var uRange = maxExclusive - minInclusive;
             if (uRange <= 0)
             {
-                throw new RandomArgumentOutOfRangeException(uRange, 0, true);
+                Throw.ArgumentMustBeGreaterOrEqual(nameof(maxExclusive), maxExclusive, 0);
             }
 
             var limit = ulong.MaxValue - ulong.MaxValue % uRange;
@@ -451,7 +451,7 @@ namespace Depra.Random.System
         {
             if (minInclusive > maxExclusive)
             {
-                throw new RandomArgumentOutOfRangeException(minInclusive, nameof(maxExclusive));
+                Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
             return random.NextDecimal() * (maxExclusive - minInclusive) + minInclusive;
