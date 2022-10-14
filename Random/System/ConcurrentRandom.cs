@@ -1,19 +1,25 @@
 using System;
+using Depra.Random.Randomizers;
 
 namespace Depra.Random.System
 {
-    public sealed class ConcurrentRandom : global::System.Random
+    public sealed class ConcurrentRandom : global::System.Random, IRandomizer
     {
         private static readonly global::System.Random IMPL;
 
+        /// <inheritdoc cref="Random.Next()" />
         public override int Next() => Next(1, int.MaxValue);
 
+        /// <inheritdoc cref="Random.Next(int)" />
         public override int Next(int maxExclusive) => Next(1, maxExclusive);
 
+        /// <inheritdoc cref="Random.Next(int,int)" />
         public override int Next(int minInclusive, int maxExclusive) => IMPL.Next(minInclusive, maxExclusive);
 
+        /// <inheritdoc cref="Random.NextDouble" />
         public override double NextDouble() => IMPL.NextDouble();
 
+        /// <inheritdoc cref="Random.NextBytes" />
         public override void NextBytes(byte[] buffer) => IMPL.NextBytes(buffer);
 
         static ConcurrentRandom()

@@ -1,5 +1,3 @@
-using System;
-using Depra.Random.Internal.Exceptions;
 using Depra.Random.Randomizers;
 using Depra.Random.Services;
 using FluentAssertions;
@@ -9,30 +7,16 @@ using NUnit.Framework;
 namespace Depra.Random.UnitTests
 {
     [TestFixture]
-    public class RandomServiceTests
+    internal class RandomServiceTests
     {
         [Test]
-        public void WhenGetRandomizer_AndTypeIsNotDefined_ThenThrowArgumentException()
+        public void WhenGetRandomizer_AndServiceConstructed_ThenRandomizerIsNotNull()
         {
             // Arrange.
-            var randomService = new RandomService();
+            var randomService = new RandomService(Substitute.For<IRandomizer>());
 
             // Act.
-            Action act = () => randomService.GetRandomizer<int>();
-
-            // Assert.
-            act.Should().Throw<NoRegistrationException>();
-        }
-
-        [Test]
-        public void WhenGetRandomizer_AndTypeIsDefined_ThenRandomizerIsNotNull()
-        {
-            // Arrange.
-            var randomService = new RandomService();
-            randomService.RegisterRandomizer(randomizer: Substitute.For<IRandomizer<int>>());
-
-            // Act.
-            var randomizer = randomService.GetRandomizer<int>();
+            var randomizer = randomService.GetRandomizer();
 
             // Assert.
             randomizer.Should().NotBeNull();

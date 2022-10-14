@@ -4,8 +4,6 @@ namespace Depra.Random.Services
 {
     public interface IRandomService
     {
-        IRandomizer<T> GetRandomizer<T>();
-
-        INumberRandomizer<T> GetNumberRandomizer<T>();
+        IRandomizer GetRandomizer();
     }
 }

@@ -1,14 +1,15 @@
-using System;
-
 namespace Depra.Random.Randomizers
 {
     public interface IRandomizer
     {
-        Type ValueType { get; }
-    }
-    
-    public interface IRandomizer<out T> : IRandomizer
-    {
-        T Next();
+        int Next();
+
+        int Next(int maxExclusive);
+
+        int Next(int minInclusive, int maxExclusive);
+
+        double NextDouble();
+
+        void NextBytes(byte[] buffer);
     }
 }

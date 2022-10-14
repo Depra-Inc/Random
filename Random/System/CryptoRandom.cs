@@ -2,13 +2,14 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using Depra.Random.Internal.Exceptions;
+using Depra.Random.Randomizers;
 
 namespace Depra.Random.System
 {
     /// <summary>
     /// A random number generator based on the <see cref="RNGCryptoServiceProvider"/>.
     /// </summary>
-    public sealed class CryptoRandom : global::System.Random, IDisposable
+    public sealed class CryptoRandom : global::System.Random, IRandomizer, IDisposable
     {
         private readonly RNGCryptoServiceProvider _rng;
         private bool _disposed;
@@ -28,7 +29,7 @@ namespace Depra.Random.System
             Justification = "Cannot remove this parameter as we implement the full API of System.Random")]
         public CryptoRandom(int ignoredSeed) : this() { }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="Random.Next()" />
         public override int Next()
         {
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
@@ -38,7 +39,7 @@ namespace Depra.Random.System
 #endif
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="Random.Next(int)" />
         public override int Next(int maxExclusive)
         {
             if (maxExclusive < 0)
@@ -49,7 +50,7 @@ namespace Depra.Random.System
             return Next(0, maxExclusive);
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="Random.Next(int,int)" />
         public override int Next(int minInclusive, int maxExclusive)
         {
             if (minInclusive > maxExclusive)
@@ -69,10 +70,10 @@ namespace Depra.Random.System
 #endif
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="Random.NextDouble" />
         public override double NextDouble() => GenerateUInt32() / (uint.MaxValue + 1.0);
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="Random.NextBytes" />
         public override void NextBytes(byte[] buffer) => _rng.GetBytes(buffer);
 
         /// <summary>
@@ -101,6 +102,8 @@ namespace Depra.Random.System
 
             return randomBytes;
         }
+
+        ~CryptoRandom() => Dispose(false);
 
         /// <inheritdoc />
         public void Dispose()

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Depra.Random.System
+namespace Depra.Random.Extensions
 {
-    public static partial class SystemRandomExtensions
+    public static partial class RandomizerExtensions
     {
         internal static class CharsGenerator
         {

@@ -1,16 +1,17 @@
 using System;
 using Depra.Random.Internal.Exceptions;
+using Depra.Random.Randomizers;
 
-namespace Depra.Random.System
+namespace Depra.Random.Extensions
 {
-    public static partial class SystemRandomExtensions
+    public static partial class RandomizerExtensions
     {
         internal static class OptimizedUInt32Randomizer
         {
-            public static uint GetRandomUInt32(global::System.Random random) =>
+            public static uint GetRandomUInt32(IRandomizer random) =>
                 (uint) random.Next(1 << 30) << 2 | (uint) random.Next(1 << 2);
 
-            public static uint GetRandomUInt32(global::System.Random random, uint maxExclusive)
+            public static uint GetRandomUInt32(IRandomizer random, uint maxExclusive)
             {
                 uint x;
                 if (maxExclusive < int.MaxValue)
@@ -30,7 +31,7 @@ namespace Depra.Random.System
                 return x;
             }
 
-            public static uint GetRandomUInt32(global::System.Random random, uint minInclusive,
+            public static uint GetRandomUInt32(IRandomizer random, uint minInclusive,
                 uint maxExclusive) => minInclusive < maxExclusive
                 ? minInclusive + GetRandomUInt32(random, maxExclusive - minInclusive)
                 : maxExclusive + GetRandomUInt32(random, minInclusive - maxExclusive);
@@ -38,7 +39,7 @@ namespace Depra.Random.System
 
         internal static class UInt32Randomizer
         {
-            public static uint GetRandomUInt32(global::System.Random random)
+            public static uint GetRandomUInt32(IRandomizer random)
             {
                 var buffer = new byte[4];
                 random.NextBytes(buffer);
@@ -46,10 +47,10 @@ namespace Depra.Random.System
                 return BitConverter.ToUInt32(buffer, 0);
             }
 
-            public static uint GetRandomUInt32(global::System.Random random, uint maxExclusive) =>
+            public static uint GetRandomUInt32(IRandomizer random, uint maxExclusive) =>
                 random.NextUInt(uint.MinValue, maxExclusive);
 
-            public static uint GetRandomUInt32(global::System.Random random, uint minInclusive,
+            public static uint GetRandomUInt32(IRandomizer random, uint minInclusive,
                 uint maxExclusive)
             {
                 if (minInclusive > maxExclusive)

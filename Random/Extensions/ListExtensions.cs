@@ -3,7 +3,7 @@ using Depra.Random.Randomizers;
 
 namespace Depra.Random.Extensions
 {
-    public static class ListRandomExtensions
+    public static class ListExtensions
     {
         /// <summary>
         /// Return random element.
@@ -12,7 +12,7 @@ namespace Depra.Random.Extensions
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in array.</typeparam>
         /// <returns>Random <see cref="T"/>.</returns>
-        public static T GetRandomElement<T>(this IList<T> elements, INumberRandomizer<int> randomizer)
+        public static T GetRandomElement<T>(this IList<T> elements, IRandomizer randomizer)
         {
             return elements.Count == 0
                 ? default

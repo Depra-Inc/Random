@@ -2,44 +2,53 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Depra.Random.Internal.Exceptions;
+using Depra.Random.Randomizers;
 
-namespace Depra.Random.System
+namespace Depra.Random.Extensions
 {
-    public static partial class SystemRandomExtensions
+    public static partial class RandomizerExtensions
     {
+        // public static async Task<T> NextAsync<T>(this IRandomizer<T> randomizer) =>
+        //     await Task.Run(randomizer.Next).ConfigureAwait(false);
+        
+        // public static async Task<T> NextAsync<T>(this INumberRandomizer<T> randomizer,
+        //     T minInclusive, T maxExclusive) =>
+        //     await Task.Run(() => randomizer.Next(minInclusive, maxExclusive))
+        //         .ConfigureAwait(false);
+        
         #region SByte
 
         /// <summary>
         /// Returns a non-negative random <see cref="sbyte"/>.
         /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 8-bit signed integer that is greater than or equal to 0 and less than <see cref="sbyte.MaxValue"/>.</returns>
-        public static sbyte NextSByte(this global::System.Random rand) => (sbyte) rand.Next(sbyte.MaxValue);
+        public static sbyte NextSByte(this IRandomizer randomizer) => (sbyte) randomizer.Next(sbyte.MaxValue);
 
         /// <summary>
         /// Returns a non-negative random <see cref="sbyte"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive upper bound of the random number returned. Must be greater than or equal to 0.</param>
         /// <returns>
         /// A 8-bit signed integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
         /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
         /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
         /// </returns>
-        public static sbyte NextSByte(this global::System.Random random, sbyte maxExclusive)
+        public static sbyte NextSByte(this IRandomizer randomizer, sbyte maxExclusive)
         {
             if (maxExclusive < 0)
             {
                 Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
-            return (sbyte) random.Next(maxExclusive);
+            return (sbyte) randomizer.Next(maxExclusive);
         }
 
         /// <summary>
         /// Returns a random <see cref="sbyte"/> that is within a specified range.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>
@@ -47,15 +56,21 @@ namespace Depra.Random.System
         /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
         /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="maxExclusive"/> is returned.
         /// </returns>
-        public static sbyte NextSByte(this global::System.Random random, sbyte minInclusive, sbyte maxExclusive)
+        public static sbyte NextSByte(this IRandomizer randomizer, sbyte minInclusive, sbyte maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
                 Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
-            return (sbyte) random.Next(minInclusive, maxExclusive);
+            return (sbyte) randomizer.Next(minInclusive, maxExclusive);
         }
+
+        public static sbyte NextPositiveSByte(this IRandomizer randomizer, sbyte maxExclusive) =>
+            NextSByte(randomizer, 1, maxExclusive);
+
+        public static sbyte NextNegativeSByte(this IRandomizer randomizer, sbyte minInclusive) =>
+            NextSByte(randomizer, minInclusive, -1);
 
         #endregion
 
@@ -64,20 +79,20 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="byte"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive upper bound of the random number returned. <see cref="maxExclusive"/> must be greater than or equal to 0.</param>
         /// <returns>
         /// A 8-bit unsigned integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
         /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
         /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
         /// </returns>
-        public static byte NextByte(this global::System.Random random, byte maxExclusive = byte.MaxValue) =>
-            (byte) random.Next(maxExclusive);
+        public static byte NextByte(this IRandomizer randomizer, byte maxExclusive = byte.MaxValue) =>
+            (byte) randomizer.Next(maxExclusive);
 
         /// <summary>
         /// Returns a random <see cref="byte"/> that is within a specified range.
         /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <param name="rand">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>
@@ -85,7 +100,7 @@ namespace Depra.Random.System
         /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
         /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
         /// </returns>
-        public static byte NextByte(this global::System.Random rand, byte minInclusive, byte maxExclusive)
+        public static byte NextByte(this IRandomizer rand, byte minInclusive, byte maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
@@ -102,34 +117,34 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a non-negative random <see cref="short"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 16-bit signed integer that is greater than or equal to 0 and less than <see cref="short.MaxValue"/>.</returns>
-        public static short NextShort(this global::System.Random random) => (short) random.Next(short.MaxValue);
+        public static short NextShort(this IRandomizer randomizer) => (short) randomizer.Next(short.MaxValue);
 
         /// <summary>
         /// Returns a non-negative random <see cref="short"/> that is less than the specified <see cref="maxExclusive"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. <see cref="maxExclusive"/> must be greater than or equal to 0.</param>
         /// <returns>
         /// A 16-bit signed integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
         /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
         /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
         /// </returns>
-        public static short NextShort(this global::System.Random random, short maxExclusive)
+        public static short NextShort(this IRandomizer randomizer, short maxExclusive)
         {
             if (maxExclusive < 0)
             {
                 Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
-            return (short) random.Next(maxExclusive);
+            return (short) randomizer.Next(maxExclusive);
         }
 
         /// <summary>
         /// Returns a random <see cref="short"/> that is within a specified range.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>
@@ -137,15 +152,21 @@ namespace Depra.Random.System
         /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
         /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
         /// </returns>
-        public static short NextShort(this global::System.Random random, short minInclusive, short maxExclusive)
+        public static short NextShort(this IRandomizer randomizer, short minInclusive, short maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
                 Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
-            return (short) random.Next(minInclusive, maxExclusive);
+            return (short) randomizer.Next(minInclusive, maxExclusive);
         }
+
+        public static short NextPositiveShort(this IRandomizer randomizer, short maxExclusive) =>
+            NextShort(randomizer, 1, maxExclusive);
+
+        public static short NextNegativeShort(this IRandomizer randomizer, short minInclusive) =>
+            NextShort(randomizer, minInclusive, -1);
 
         #endregion
 
@@ -154,28 +175,28 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="ushort"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 16-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ushort.MaxValue"/>.</returns>
-        public static ushort NextUShort(this global::System.Random random) =>
-            (ushort) random.Next(ushort.MaxValue);
+        public static ushort NextUShort(this IRandomizer randomizer) =>
+            (ushort) randomizer.Next(ushort.MaxValue);
 
         /// <summary>
         /// Returns a random <see cref="ushort"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to 0.</param>
         /// <returns>
         /// A 16-bit unsigned integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
         /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
         /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
         /// </returns>
-        public static ushort NextUShort(this global::System.Random random, ushort maxExclusive) =>
-            (ushort) random.Next(maxExclusive);
+        public static ushort NextUShort(this IRandomizer randomizer, ushort maxExclusive) =>
+            (ushort) randomizer.Next(maxExclusive);
 
         /// <summary>
         /// Returns a random <see cref="ushort"/> that is within a specified range.
         /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <param name="rand">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>
@@ -183,7 +204,7 @@ namespace Depra.Random.System
         /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
         /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
         /// </returns>
-        public static ushort NextUShort(this global::System.Random rand, ushort minInclusive, ushort maxExclusive)
+        public static ushort NextUShort(this IRandomizer rand, ushort minInclusive, ushort maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
@@ -195,33 +216,43 @@ namespace Depra.Random.System
 
         #endregion
 
+        #region Int
+
+        public static int NextPositiveInt(this IRandomizer randomizer, int maxExclusive) =>
+            randomizer.Next(1, maxExclusive);
+
+        public static int NextNegativeInt(this IRandomizer randomizer, int minInclusive) =>
+            randomizer.Next(minInclusive, -1);
+
+        #endregion
+
         #region UInt
 
         /// <summary>
         /// Returns a random <see cref="uint"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="uint.MaxValue"/>.</returns>
-        public static uint NextUInt(this global::System.Random random) =>
-            OptimizedUInt32Randomizer.GetRandomUInt32(random);
+        public static uint NextUInt(this IRandomizer randomizer) =>
+            OptimizedUInt32Randomizer.GetRandomUInt32(randomizer);
 
         /// <summary>
         /// Returns a random <see cref="uint"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to 0.</param>
         /// <returns>
         /// A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="maxExclusive"/>.
         /// That is, the range of return values ordinarily includes 0 but not <see cref="maxExclusive"/>.
         /// However, if <see cref="maxExclusive"/> equals 0, <see cref="maxExclusive"/> is return.
         /// </returns>
-        public static uint NextUInt(this global::System.Random random, uint maxExclusive) =>
-            OptimizedUInt32Randomizer.GetRandomUInt32(random, maxExclusive);
+        public static uint NextUInt(this IRandomizer randomizer, uint maxExclusive) =>
+            OptimizedUInt32Randomizer.GetRandomUInt32(randomizer, maxExclusive);
 
         /// <summary>
         /// Returns a random <see cref="uint"/> that is within a specified range.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>
@@ -229,8 +260,8 @@ namespace Depra.Random.System
         /// That is, the range of return values includes <see cref="minInclusive"/> but not <see cref="maxExclusive"/>.
         /// If <see cref="minInclusive"/> equals <see cref="maxExclusive"/>, <see cref="minInclusive"/> is returned.
         /// </returns>
-        public static uint NextUInt(this global::System.Random random, uint minInclusive, uint maxExclusive) =>
-            OptimizedUInt32Randomizer.GetRandomUInt32(random, minInclusive, maxExclusive);
+        public static uint NextUInt(this IRandomizer randomizer, uint minInclusive, uint maxExclusive) =>
+            OptimizedUInt32Randomizer.GetRandomUInt32(randomizer, minInclusive, maxExclusive);
 
         #endregion
 
@@ -239,11 +270,11 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="double"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>A <see cref="double"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static double NextDouble(this global::System.Random random, double minInclusive = 0.0,
+        public static double NextDouble(this IRandomizer randomizer, double minInclusive = 0.0,
             double maxExclusive = double.MaxValue)
         {
             if (minInclusive > maxExclusive)
@@ -251,9 +282,15 @@ namespace Depra.Random.System
                 Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
-            var sample = random.NextDouble();
+            var sample = randomizer.NextDouble();
             return maxExclusive * sample + minInclusive * (1d - sample);
         }
+
+        public static double NextPositiveDouble(this IRandomizer randomizer, double maxExclusive) =>
+            NextDouble(randomizer, 1, maxExclusive);
+
+        public static double NextNegativeDouble(this IRandomizer randomizer, double minInclusive) =>
+            NextDouble(randomizer, minInclusive, -1);
 
         #endregion
 
@@ -262,18 +299,18 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random floating-point number that is greater than or equal to 0.0f, and less than 1.0f.
         /// </summary>
-        /// <param name="rand">The given <see cref="Random"/> instance.</param>
+        /// <param name="rand">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to 0.0f, and less than 1.0f.</returns>
-        public static float NextFloat(this global::System.Random rand) => (float) rand.NextDouble();
+        public static float NextFloat(this IRandomizer rand) => (float) rand.NextDouble();
 
         /// <summary>
         /// Returns a random floating-point number that is greater than or equal to minValue, and less than maxValue.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>A <see cref="Single"/>-precision floating point number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static float NextFloat(this global::System.Random random, float minInclusive,
+        public static float NextFloat(this IRandomizer randomizer, float minInclusive,
             float maxExclusive = float.MaxValue)
         {
             if (minInclusive > maxExclusive)
@@ -281,8 +318,14 @@ namespace Depra.Random.System
                 Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
-            return (float) random.NextDouble(minInclusive, maxExclusive);
+            return (float) randomizer.NextDouble(minInclusive, maxExclusive);
         }
+
+        public static float NextPositiveFloat(this IRandomizer randomizer, float maxExclusive) =>
+            NextFloat(randomizer, 1, maxExclusive);
+
+        public static float NextNegativeFloat(this IRandomizer randomizer, float minInclusive) =>
+            NextFloat(randomizer, minInclusive, -1);
 
         #endregion
 
@@ -291,35 +334,35 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a non-negative random <see cref="long"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 64-bit signed integer that is greater than or equal to 0 and less than <see cref="long.MaxValue"/>.</returns>
-        public static long NextLong(this global::System.Random random) =>
-            (long) random.NextULong(long.MaxValue);
+        public static long NextLong(this IRandomizer randomizer) =>
+            (long) randomizer.NextULong(long.MaxValue);
 
         /// <summary>
         /// Returns a non-negative random <see cref="long"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive upper bound of the random number returned. maxValue must be greater than or equal to 0.</param>
         /// <returns>A 64-bit signed integer that is greater than or equal to 0 and less than maxValue; that is, the range of return values ordinarily inclueds 0 but not maxValue. However, if maxValue equals 0, maxValue is return.</returns>
-        public static long NextLong(this global::System.Random random, long maxExclusive)
+        public static long NextLong(this IRandomizer randomizer, long maxExclusive)
         {
             if (maxExclusive < 0)
             {
                 Throw.ArgumentMustBeGreater(nameof(maxExclusive), maxExclusive, 0);
             }
 
-            return (long) random.NextULong((ulong) maxExclusive);
+            return (long) randomizer.NextULong((ulong) maxExclusive);
         }
 
         /// <summary>
         /// Returns a random <see cref="long"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>A 64-bit signed integer that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static long NextLong(this global::System.Random random, long minInclusive, long maxExclusive)
+        public static long NextLong(this IRandomizer randomizer, long minInclusive, long maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
@@ -335,11 +378,17 @@ namespace Depra.Random.System
             ulong ulongRand;
             do
             {
-                ulongRand = random.NextULong();
+                ulongRand = randomizer.NextULong();
             } while (ulongRand > limit);
 
             return (long) (ulongRand % uRange) + minInclusive;
         }
+
+        public static long NextPositiveLong(this IRandomizer randomizer, long maxExclusive) =>
+            NextLong(randomizer, 1, maxExclusive);
+
+        public static long NextNegativeLong(this IRandomizer randomizer, long minInclusive) =>
+            NextLong(randomizer, minInclusive, -1);
 
         #endregion
 
@@ -348,12 +397,12 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="ulong"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random)
+        public static ulong NextULong(this IRandomizer randomizer)
         {
             var buffer = new byte[8];
-            random.NextBytes(buffer);
+            randomizer.NextBytes(buffer);
 
             return BitConverter.ToUInt64(buffer, 0);
         }
@@ -361,20 +410,20 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="ulong"/> that is less than the specified maximum.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to 0.</param>
         /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random, ulong maxExclusive) =>
-            random.NextULong(ulong.MinValue, maxExclusive);
+        public static ulong NextULong(this IRandomizer randomizer, ulong maxExclusive) =>
+            randomizer.NextULong(ulong.MinValue, maxExclusive);
 
         /// <summary>
         /// Returns a random <see cref="ulong"/> that is within a specified range.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>A 32-bit unsigned integer that is greater than or equal to 0 and less than <see cref="ulong.MaxValue"/>.</returns>
-        public static ulong NextULong(this global::System.Random random, ulong minInclusive, ulong maxExclusive)
+        public static ulong NextULong(this IRandomizer randomizer, ulong minInclusive, ulong maxExclusive)
         {
             var uRange = maxExclusive - minInclusive;
             if (uRange <= 0)
@@ -386,7 +435,7 @@ namespace Depra.Random.System
             ulong ulongRand;
             do
             {
-                ulongRand = random.NextULong();
+                ulongRand = randomizer.NextULong();
             } while (ulongRand > limit);
 
             return ulongRand % uRange + minInclusive;
@@ -401,14 +450,14 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="bool"/> value.
         /// </summary>
-        /// <param name="random">The <see cref="Random"/> instance to use.</param>
+        /// <param name="randomizer">The <see cref="IRandomizer"/> instance to use.</param>
         /// <returns>A <see cref="bool"/> value that is either <see langword="true"/> or <see langword="false"/>.</returns>
-        public static bool NextBoolean(this global::System.Random random)
+        public static bool NextBoolean(this IRandomizer randomizer)
         {
             _boolBits >>= 1;
             if (_boolBits <= 1)
             {
-                _boolBits = (uint) ~random.Next();
+                _boolBits = (uint) ~randomizer.Next();
             }
 
             return (_boolBits & 1) == 0;
@@ -417,11 +466,11 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random bool with the specified probability of being <see langword="true"/>.
         /// </summary>
-        /// <param name="random">The <see cref="Random"/> instance to use.</param>
+        /// <param name="randomizer">The <see cref="IRandomizer"/> instance to use.</param>
         /// <param name="probability">Probability argument must be in the range 0.0 to 1.0, inclusive.</param>
         /// <returns>A <see cref="bool"/> value that is either <see langword="true"/> or <see langword="false"/>.</returns>
-        public static bool NextBoolean(this global::System.Random random, double probability) =>
-            random.NextDouble() < probability;
+        public static bool NextBoolean(this IRandomizer randomizer, double probability) =>
+            randomizer.NextDouble() < probability;
 
         #endregion
 
@@ -430,51 +479,75 @@ namespace Depra.Random.System
         /// <summary>
         /// Returns a random <see cref="decimal"/> that is greater than or equal to 0.0m, and less than 1.0m.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <returns>A <see cref="decimal"/> number that is greater than or equal to 0.0m, and less than 1.0m.</returns>
-        public static decimal NextDecimal(this global::System.Random random)
-        {
-            var values = Enumerable.Range(0, 29).Select(x => random.Next(10).ToString());
-            var result = decimal.Parse($"0.{string.Join(string.Empty, values)}");
-
-            return result / 1.000000000000000000000000000000000m;
-        }
+        public static decimal NextDecimal(this IRandomizer randomizer) =>
+            DecimalGenerator.GenerateDecimal(randomizer);
 
         /// <summary>
         /// Returns a random <see cref="decimal"/> that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.
         /// </summary>
-        /// <param name="random">The given <see cref="Random"/> instance.</param>
+        /// <param name="randomizer">The given <see cref="IRandomizer"/> instance.</param>
         /// <param name="minInclusive">The inclusive minimum bound.</param>
         /// <param name="maxExclusive">The exclusive maximum bound. Must be greater than or equal to <see cref="minInclusive"/>.</param>
         /// <returns>A <see cref="decimal"/> number that is greater than or equal to <see cref="minInclusive"/>, and less than <see cref="maxExclusive"/>.</returns>
-        public static decimal NextDecimal(this global::System.Random random, decimal minInclusive, decimal maxExclusive)
+        public static decimal NextDecimal(this IRandomizer randomizer, decimal minInclusive, decimal maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
                 Throw.ArgumentMustBeSmallerOrEqual(nameof(minInclusive), minInclusive, maxExclusive);
             }
 
-            return random.NextDecimal() * (maxExclusive - minInclusive) + minInclusive;
+            return DecimalGenerator.GenerateDecimal(randomizer, minInclusive, maxExclusive);
+        }
+
+        public static decimal NextPositiveDecimal(this IRandomizer randomizer, decimal maxExclusive) =>
+            NextDecimal(randomizer, 1, maxExclusive);
+
+        public static decimal NextNegativeDecimal(this IRandomizer randomizer, decimal minInclusive) =>
+            NextDecimal(randomizer, minInclusive, -1);
+
+        #endregion
+
+        #region Gaussian
+
+        /// <summary>
+        /// <see href="https://stackoverflow.com/questions/218060/random-gaussian-variables">source</see>
+        /// </summary>
+        public static double NextGaussian(this IRandomizer randomizer, double mu = 0, double sigma = 1)
+        {
+            // Uniform(0,1] random doubles.
+            var u1 = 1.0 - randomizer.Next();
+            var u2 = 1.0 - randomizer.Next();
+
+            // Random normal(0,1).
+            var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                                Math.Sin(2.0 * Math.PI * u2);
+
+            // Random normal(mean,stdDev^2).
+            var randNormal = mu + sigma * randStdNormal;
+
+            return randNormal;
         }
 
         #endregion
 
         #region Enum
 
-        public static TEnum NextEnum<TEnum>(this global::System.Random random) where TEnum : struct, Enum
+        public static TEnum NextEnum<TEnum>(this IRandomizer randomizer) where TEnum : struct, Enum
         {
 #if NET5_0_OR_GREATER
             var values = Enum.GetValues<TEnum>();
             return values[random.Next(values.Length)];
 #else
-            return (TEnum) NextEnum(random, typeof(TEnum));
+            return (TEnum) NextEnum(randomizer, typeof(TEnum));
 #endif
         }
 
-        private static object NextEnum(this global::System.Random random, Type enumType)
+        private static object NextEnum(this IRandomizer randomizer, Type enumType)
         {
             var values = Enum.GetValues(enumType);
-            var randomIndex = random.Next(values.Length);
+            var randomIndex = randomizer.Next(values.Length);
             var randomEnum = values.GetValue(randomIndex);
 
             return randomEnum;
@@ -484,30 +557,57 @@ namespace Depra.Random.System
 
         #region String
 
-        public static string NextString(this global::System.Random random, int count, bool includeLowerCase) =>
-            new string(random.NextChars(count, includeLowerCase).ToArray());
+        public static string NextString(this IRandomizer randomizer, int count, bool includeLowerCase) =>
+            new string(randomizer.NextChars(count, includeLowerCase).ToArray());
+
+        /// <summary>
+        /// Generate random string of <paramref name="length"/> for <paramref name="charset"/>.
+        /// </summary>
+        /// <remarks>
+        /// <see href="https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings">source</see>
+        /// </remarks>
+        public static string NextString(this IRandomizer randomizer, int length, string charset)
+        {
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length));
+            }
+
+            if (string.IsNullOrEmpty(charset))
+            {
+                throw new ArgumentException(nameof(charset));
+            }
+
+            var randomString = new char[length];
+            for (var i = 0; i < length; i++)
+            {
+                randomString[i] = charset[randomizer.NextPositiveInt(charset.Length)];
+            }
+
+            return new string(randomString);
+        }
 
         #endregion
 
         #region Chars
 
-        public static void NextChars(this global::System.Random random, char[] buffer)
+        public static void NextChars(this IRandomizer randomizer, char[] buffer)
         {
             for (var i = 0; i < buffer.Length; ++i)
             {
                 // Capping to byte value here to not exceed
                 // 56 bit crypto keys length requirement by
                 // Apple to avoid cryptography declaration.
-                buffer[i] = (char) (random.Next() % 256);
+                buffer[i] = (char) (randomizer.Next() % 256);
             }
         }
 
-        public static IEnumerable<char> NextChars(this global::System.Random random, int count,
+        public static IEnumerable<char> NextChars(this IRandomizer randomizer, int count,
             bool includeLowerCase)
         {
             var characters = CharsGenerator.GetAvailableRandomCharacters(includeLowerCase);
             var result = Enumerable.Range(0, count)
-                .Select(_ => characters[random.Next(characters.Count)]);
+                .Select(_ => characters[randomizer.Next(characters.Count)]);
 
             return result;
         }

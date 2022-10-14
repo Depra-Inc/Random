@@ -11,7 +11,7 @@ namespace Depra.Random.UnitTests
 {
     [TestFixture]
     [TestOf(typeof(ConcurrentRandom))]
-    public class ConcurrentRandomTests
+    internal class ConcurrentRandomTests
     {
         private ConcurrentRandom _concurrentRandom;
 

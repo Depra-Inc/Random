@@ -16,9 +16,7 @@ namespace Depra.Random.Benchmarks
         public void Setup()
         {
             _random = new global::System.Random();
-            _randomService = new RandomServiceBuilder()
-                .With(new SystemRandomizers(() => new global::System.Random()))
-                .Build();
+            _randomService = new RandomService(new SystemRandomizer());
         }
 
         [Benchmark(Baseline = true)]
@@ -28,13 +26,13 @@ namespace Depra.Random.Benchmarks
         public double Manual_GetRandomDouble() => _random.NextDouble();
 
         [Benchmark]
-        public int Depra_GetRandomInt() => _randomService.GetRandomizer<int>().Next();
+        public int Depra_GetRandomInt() => _randomService.GetRandomizer().Next();
 
         [Benchmark]
-        public long Depra_GetRandomLong() => _randomService.GetRandomizer<long>().Next();
+        public long Depra_GetRandomLong() => _randomService.GetRandomizer().NextLong();
 
         [Benchmark]
-        public double Depra_GetRandomDouble() => _randomService.GetRandomizer<double>().Next();
+        public double Depra_GetRandomDouble() => _randomService.GetRandomizer().NextDouble();
 
         [Benchmark]
         public int Manual_GetRandomInt_Async() =>
@@ -42,22 +40,22 @@ namespace Depra.Random.Benchmarks
                 .GetAwaiter()
                 .GetResult();
 
-        [Benchmark]
-        public int Depra_GetRandomInt_Async() =>
-            _randomService.GetRandomizer<int>().NextAsync()
-                .GetAwaiter()
-                .GetResult();
-
-        [Benchmark]
-        public long Depra_GetRandomLong_Async() =>
-            _randomService.GetRandomizer<long>().NextAsync()
-                .GetAwaiter()
-                .GetResult();
-
-        [Benchmark]
-        public double Depra_GetRandomDouble_Async() =>
-            _randomService.GetRandomizer<double>().NextAsync()
-                .GetAwaiter()
-                .GetResult();
+        // [Benchmark]
+        // public int Depra_GetRandomInt_Async() =>
+        //     _randomService.GetRandomizer().NextAsync()
+        //         .GetAwaiter()
+        //         .GetResult();
+        //
+        // [Benchmark]
+        // public long Depra_GetRandomLong_Async() =>
+        //     _randomService.GetRandomizer().NextAsync()
+        //         .GetAwaiter()
+        //         .GetResult();
+        //
+        // [Benchmark]
+        // public double Depra_GetRandomDouble_Async() =>
+        //     _randomService.GetRandomizer().NextAsync()
+        //         .GetAwaiter()
+        //         .GetResult();
     }
 }

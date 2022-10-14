@@ -11,7 +11,7 @@ namespace Depra.Random.UnitTests
 {
     [TestFixture]
     [TestOf(typeof(CryptoRandom))]
-    public class CryptoRandomTests
+    internal class CryptoRandomTests
     {
         private CryptoRandom _cryptoRandom;
 

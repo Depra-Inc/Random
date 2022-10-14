@@ -5,7 +5,7 @@ using Depra.Random.Randomizers;
 
 namespace Depra.Random.Extensions
 {
-    public static class EnumerableRandomExtensions
+    public static class EnumerableExtensions
     {
         /// <summary>
         /// Gets a random element of enumerable.
@@ -14,7 +14,7 @@ namespace Depra.Random.Extensions
         /// <param name="randomizer">Randomizer for <see cref="int"/>.</param>
         /// <typeparam name="T">Type of elements in enumerable.</typeparam>
         /// <returns>Random <see cref="T"/>.</returns>
-        public static T GetRandomElement<T>(this IEnumerable<T> elements, INumberRandomizer<int> randomizer)
+        public static T GetRandomElement<T>(this IEnumerable<T> elements, IRandomizer randomizer)
         {
             if (elements == null)
             {
@@ -30,7 +30,7 @@ namespace Depra.Random.Extensions
             return elements.ElementAt(randomIndex);
         }
 
-        public static int GetRandomElementCount<T>(this IReadOnlyList<T> readOnlyList, INumberRandomizer<int> randomizer,
+        public static int GetRandomElementCount<T>(this IReadOnlyList<T> readOnlyList, IRandomizer randomizer,
             int min = 0, int max = -1)
         {
             if (max == -1)
@@ -42,7 +42,7 @@ namespace Depra.Random.Extensions
         }
 
         public static IEnumerable<T> GetRandomUniqueElements<T>(this IEnumerable<T> enumerable,
-            INumberRandomizer<int> randomizer, int min = 0, int max = -1)
+            IRandomizer randomizer, int min = 0, int max = -1)
         {
             var array = enumerable.ToArray();
             var randomElementCount = array.GetRandomElementCount(randomizer, min, max);
@@ -63,12 +63,12 @@ namespace Depra.Random.Extensions
         /// <typeparam name="T">Type of elements in enumerable.</typeparam>
         /// <returns>Random element.</returns>
         /// <exception cref="Exception">Random double was more than sum of the weights.</exception>
-        public static T GetWeighedRandom<T>(this IEnumerable<T> enumerable, INumberRandomizer<double> randomizer,
+        public static T GetWeighedRandom<T>(this IEnumerable<T> enumerable, IRandomizer randomizer,
             Func<T, double> weight)
         {
             var array = enumerable.ToArray();
             var sum = array.Sum(weight);
-            var randomValue = randomizer.Next(0, sum);
+            var randomValue = randomizer.NextDouble(0, sum);
 
             foreach (var element in array)
             {
@@ -80,7 +80,7 @@ namespace Depra.Random.Extensions
             }
 
             throw new Exception(
-                $"Algorithm error in {nameof(GetWeighedRandom)} method {typeof(EnumerableRandomExtensions)}");
+                $"Algorithm error in {nameof(GetWeighedRandom)} method {typeof(EnumerableExtensions)}");
         }
     }
 }
