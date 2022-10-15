@@ -1,3 +1,4 @@
+using System;
 using Depra.Random.Randomizers;
 
 namespace Depra.Random.Services
@@ -8,6 +9,7 @@ namespace Depra.Random.Services
 
         public IRandomizer GetRandomizer() => _randomizer;
 
-        public RandomService(IRandomizer randomizer) => _randomizer = randomizer;
+        public RandomService(IRandomizer randomizer) =>
+            _randomizer = randomizer ?? throw new NullReferenceException("Randomizer is null!");
     }
 }
