@@ -16,7 +16,7 @@ namespace Depra.Random.Benchmarks
         public void Setup()
         {
             _random = new global::System.Random();
-            _randomService = new RandomService(new SystemRandomizer());
+            _randomService = new RandomService(new StandardRandomizer());
         }
 
         [Benchmark(Baseline = true)]

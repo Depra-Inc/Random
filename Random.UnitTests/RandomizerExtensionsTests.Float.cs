@@ -8,7 +8,7 @@ namespace Depra.Random.UnitTests;
 internal static partial class RandomizerExtensionsTests
 {
     [TestFixture]
-    internal class Double
+    internal class Float
     {
         private IRandomizer _randomizer = null!;
 
@@ -16,20 +16,20 @@ internal static partial class RandomizerExtensionsTests
         public void SetUp() => _randomizer = new StandardRandomizer();
 
         [Test]
-        public void WhenGettingNextDouble_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(
+        public void WhenGettingNextFloat_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(
             [Values(100)] int samplesCount)
         {
             // Arrange.
-            const double tolerance = 0.01;
+            const float tolerance = 0.01f;
             var randomizer = _randomizer;
-            var randomNumbers = new double[samplesCount];
+            var randomNumbers = new float[samplesCount];
 
             // Act.
             for (var i = 0; i < samplesCount; i++)
             {
-                randomNumbers[i] = randomizer.NextDouble();;
+                randomNumbers[i] = randomizer.NextFloat();
             }
-            
+
             ConsoleHelper.PrintCollection(randomNumbers);
 
             // Assert.
@@ -37,21 +37,21 @@ internal static partial class RandomizerExtensionsTests
         }
 
         [Test]
-        public void WhenGettingNextDouble_AndInRangeWithMinAndMax_ThenRandomNubmersAreInGivenRange(
+        public void WhenGettingNextFloat_AndInRangeWithMinAndMax_ThenRandomNumbersAreInGivenRange(
             [Values(100)] int samplesCount)
         {
             // Arrange.
-            const double minValue = double.MinValue;
-            const double maxValue = double.MaxValue;
+            const float minValue = float.MinValue;
+            const float maxValue = float.MaxValue;
             var randomizer = _randomizer;
-            var randomNumbers = new double[samplesCount];
-            
+            var randomNumbers = new float[samplesCount];
+
             // Act.
             for (var i = 0; i < samplesCount; i++)
             {
-                randomNumbers[i] = randomizer.NextDouble(minValue, maxValue);
+                randomNumbers[i] = randomizer.NextFloat(minValue, maxValue);
             }
-
+            
             ConsoleHelper.PrintRandomizeResultForCollection(randomNumbers, minValue, maxValue);
 
             // Assert.
@@ -59,43 +59,43 @@ internal static partial class RandomizerExtensionsTests
         }
 
         [Test]
-        public void WhenGettingNextDouble_AndInPositiveRange_ThenRandomNumbersArePositive(
+        public void WhenGettingNextFloat_AndInPositiveRange_ThenRandomNumbersArePositive(
             [Values(100)] int samplesCount)
         {
             // Arrange.
             var randomizer = _randomizer;
-            var randomValues = new double[samplesCount];
+            var randomNumbers = new float[samplesCount];
 
             // Act.
             for (var i = 0; i < samplesCount; i++)
             {
-                randomValues[i] = randomizer.NextPositiveDouble();;
+                randomNumbers[i] = randomizer.NextPositiveFloat();
             }
-            
-            ConsoleHelper.PrintCollection(randomValues);
+
+            ConsoleHelper.PrintCollection(randomNumbers);
 
             // Assert.
-            randomValues.Should().AllSatisfy(value => value.Should().BePositive());
+            randomNumbers.Should().AllSatisfy(value => value.Should().BePositive());
         }
 
         [Test]
-        public void WhenGettingNextDouble_AndInNegativeRange_ThenRandomNumbersAreNegative(
+        public void WhenGettingNextFloat_AndInNegativeRange_ThenRandomNumbersAreNegative(
             [Values(100)] int samplesCount)
         {
             // Arrange.
             var randomizer = _randomizer;
-            var randomValues = new double[samplesCount];
+            var randomNumbers = new float[samplesCount];
 
             // Act.
             for (var i = 0; i < samplesCount; i++)
             {
-                randomValues[i] = randomizer.NextNegativeDouble();;
+                randomNumbers[i] = randomizer.NextNegativeFloat();
             }
-            
-            ConsoleHelper.PrintCollection(randomValues);
+
+            ConsoleHelper.PrintCollection(randomNumbers);
 
             // Assert.
-            randomValues.Should().AllSatisfy(value => value.Should().BeNegative());
+            randomNumbers.Should().AllSatisfy(value => value.Should().BeNegative());
         }
     }
 }

@@ -1,25 +1,38 @@
 using Depra.Random.Randomizers;
 using Depra.Random.Services;
-using FluentAssertions;
 using NSubstitute;
-using NUnit.Framework;
 
-namespace Depra.Random.UnitTests
+namespace Depra.Random.UnitTests;
+
+[TestFixture(TestOf = typeof(RandomService))]
+internal class RandomServiceTests
 {
-    [TestFixture]
-    internal class RandomServiceTests
+    [Test]
+    public void WhenGetRandomizer_AndServiceWasConstructed_ThenResultingRandomizerIsEqualToInitial()
     {
-        [Test]
-        public void WhenGetRandomizer_AndServiceConstructed_ThenRandomizerIsNotNull()
-        {
-            // Arrange.
-            var randomService = new RandomService(Substitute.For<IRandomizer>());
+        // Arrange.
+        var initialRandomizer = Substitute.For<IRandomizer>();
+        var randomService = new RandomService(initialRandomizer);
 
-            // Act.
-            var randomizer = randomService.GetRandomizer();
+        // Act.
+        var resultingRandomizer = randomService.GetRandomizer();
 
-            // Assert.
-            randomizer.Should().NotBeNull();
-        }
+        // Assert.
+        resultingRandomizer.Should().BeSameAs(initialRandomizer);
+    }
+
+    [Test]
+    public void WhenTryingToCreateService_AndRandomizerIsNull_ThenNullReferenceExceptionWillBeThrown()
+    {
+        // Arrange.
+#pragma warning disable CS8600
+        IRandomizer randomizer = null;
+#pragma warning restore CS8600
+
+        // Act.
+        Action act = () => _ = new RandomService(randomizer);
+
+        // Assert.
+        act.Should().Throw<NullReferenceException>();
     }
 }

@@ -1,56 +1,73 @@
 using Depra.Random.Extensions;
 using Depra.Random.Randomizers;
 using Depra.Random.System;
-using FluentAssertions;
-using NUnit.Framework;
 
-namespace Depra.Random.UnitTests
+namespace Depra.Random.UnitTests;
+
+internal static partial class RandomizerExtensionsTests
 {
-    internal static partial class RandomizerExtensionsTests
+    [TestFixture]
+    internal class Boolean
     {
-        [TestFixture]
-        public class Bool
+        private IRandomizer _randomizer = null!;
+
+        [SetUp]
+        public void SetUp() => _randomizer = new StandardRandomizer();
+
+        [Test]
+        public void WhenGettingNextBooleans_AndProbabilityIsDefault_ThenRandomBooleansAreNotTheSame(
+            [Values(100)] int samplesCount)
         {
-            private IRandomizer _random;
+            // Arrange.
+            var randomizer = _randomizer;
+            var randomBooleans = new bool[samplesCount];
 
-            [SetUp]
-            public void SetUp() => _random = new SystemRandomizer();
-
-            [Test]
-            public void WhenGettingRandomBoolean_AndProbabilityIsOne_ThenResultIsAlwaysTrue()
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
             {
-                // Arrange.
-                const int probability = 1;
-                const int samplesCount = 1000;
-                var randomValues = new bool[samplesCount];
-
-                // Act.
-                for (var i = 0; i < samplesCount; i++)
-                {
-                    randomValues[i] = _random.NextBoolean(probability);
-                }
-
-                // Assert.
-                randomValues.Should().AllBeEquivalentTo(true);
+                randomBooleans[i] = randomizer.NextBoolean();
             }
 
-            [Test]
-            public void WhenGettingRandomBoolean_AndProbabilityIsZero_ThenResultIsAlwaysFalse()
+            // Assert.
+            randomBooleans.Should().Contain(true).And.Contain(false);
+        }
+
+        [Test]
+        public void WhenGettingNextBoolean_AndProbabilityIsOne_ThenRandomBooleansAreAlwaysTrue(
+            [Values(1000)] int samplesCount)
+        {
+            // Arrange.
+            const int probability = 1;
+            var randomizer = _randomizer;
+            var randomBooleans = new bool[samplesCount];
+
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
             {
-                // Arrange.
-                const int probability = 0;
-                const int samplesCount = 1000;
-                var randomValues = new bool[samplesCount];
-
-                // Act.
-                for (var i = 0; i < samplesCount; i++)
-                {
-                    randomValues[i] = _random.NextBoolean(probability);
-                }
-
-                // Assert.
-                randomValues.Should().AllBeEquivalentTo(false);
+                randomBooleans[i] = randomizer.NextBoolean(probability);
             }
+
+            // Assert.
+            randomBooleans.Should().AllBeEquivalentTo(true);
+        }
+
+        [Test]
+        public void WhenGettingNextBoolean_AndProbabilityIsZero_ThenRandomBooleansAreAlwaysFalse(
+            [Values(1000)] int samplesCount)
+        {
+            // Arrange.
+            const int probability = 0;
+            var randomizer = _randomizer;
+            var randomBooleans = new bool[samplesCount];
+
+            // Act.
+            for (var i = 0; i < samplesCount; i++)
+            {
+                randomBooleans[i] = randomizer.NextBoolean(probability);
+            }
+
+            // Assert.
+            randomBooleans.Should().AllBeEquivalentTo(false);
         }
     }
 }
