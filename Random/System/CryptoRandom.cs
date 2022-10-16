@@ -1,3 +1,6 @@
+// Copyright © 2022 Nikolay Melnikov. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
