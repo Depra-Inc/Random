@@ -13,7 +13,7 @@ internal static partial class RandomizerExtensionsTests
         private IRandomizer _randomizer = null!;
 
         [SetUp]
-        public void SetUp() => _randomizer = new StandardRandomizer();
+        public void SetUp() => _randomizer = new PseudoRandom();
 
         [Test]
         public void WhenGettingNextDouble_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(

@@ -3,7 +3,10 @@ using Depra.Random.Randomizers;
 
 namespace Depra.Random.System
 {
-    public sealed class ConcurrentRandom : global::System.Random, IRandomizer
+    /// <summary>
+    /// A random number generator guaranteeing thread safety.
+    /// </summary>
+    public sealed class ConcurrentPseudoRandom : global::System.Random, IRandomizer
     {
         private static readonly global::System.Random IMPL;
 
@@ -22,7 +25,7 @@ namespace Depra.Random.System
         /// <inheritdoc cref="Random.NextBytes" />
         public override void NextBytes(byte[] buffer) => IMPL.NextBytes(buffer);
 
-        static ConcurrentRandom()
+        static ConcurrentPseudoRandom()
         {
             IMPL =
 #if NET6_0_OR_GREATER

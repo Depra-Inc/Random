@@ -3,6 +3,7 @@ using Depra.Random.Randomizers;
 
 namespace Depra.Random.Services
 {
+    /// <inheritdoc />
     public sealed class RandomService : IRandomService
     {
         private readonly IRandomizer _randomizer;

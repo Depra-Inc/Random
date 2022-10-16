@@ -18,7 +18,14 @@ namespace Depra.Random.Extensions
                     integers = integers.Concat(Enumerable.Range('a', 26));
                 }
 
-                return integers.Select(i => (char) i).ToList();
+                var characters = new List<char>();
+                foreach (var i in integers)
+                {
+                    var character = (char) i;
+                    characters.Add(character);
+                }
+
+                return characters;
             }
         }
     }

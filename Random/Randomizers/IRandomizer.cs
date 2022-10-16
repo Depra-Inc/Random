@@ -1,5 +1,8 @@
 namespace Depra.Random.Randomizers
 {
+    /// <summary>
+    /// Contract for random number generator.
+    /// </summary>
     public interface IRandomizer
     {
         int Next();

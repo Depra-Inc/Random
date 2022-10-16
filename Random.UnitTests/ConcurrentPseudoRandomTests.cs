@@ -3,20 +3,20 @@ using Depra.Random.System;
 
 namespace Depra.Random.UnitTests;
 
-[TestFixture(TestOf = typeof(ConcurrentRandom))]
-internal class ConcurrentRandomTests
+[TestFixture(TestOf = typeof(ConcurrentPseudoRandom))]
+internal class ConcurrentPseudoRandomTests
 {
-    private ConcurrentRandom _concurrentRandom = null!;
+    private ConcurrentPseudoRandom _concurrentPseudoRandom = null!;
 
     [SetUp]
-    public void SetUp() => _concurrentRandom = new ConcurrentRandom();
+    public void SetUp() => _concurrentPseudoRandom = new ConcurrentPseudoRandom();
 
     [Test]
     public void WhenGettingNextInt32Parallel_AndRangeIsDefault_ThenZerosNotFound(
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        var random = _concurrentRandom;
+        var random = _concurrentPseudoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -45,7 +45,7 @@ internal class ConcurrentRandomTests
         // Arrange.
         const int minValue = int.MinValue;
         const int maxValue = int.MaxValue;
-        var random = _concurrentRandom;
+        var random = _concurrentPseudoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -72,7 +72,7 @@ internal class ConcurrentRandomTests
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        var random = _concurrentRandom;
+        var random = _concurrentPseudoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -100,7 +100,7 @@ internal class ConcurrentRandomTests
     {
         // Arrange.
         const int bufferLength = 8;
-        var random = _concurrentRandom;
+        var random = _concurrentPseudoRandom;
         var sourceBuffer = new byte[bufferLength];
         var allThreadIssues = 0;
 

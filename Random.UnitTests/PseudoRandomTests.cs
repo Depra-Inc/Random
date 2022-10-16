@@ -4,19 +4,19 @@ using Depra.Random.UnitTests.Helpers;
 namespace Depra.Random.UnitTests;
 
 [TestFixture]
-internal class StandardRandomizerTests
+internal class PseudoRandomTests
 {
-    private StandardRandomizer _standardRandomizer = null!;
+    private PseudoRandom _pseudoRandom = null!;
 
     [SetUp]
-    public void SetUp() => _standardRandomizer = new StandardRandomizer();
+    public void SetUp() => _pseudoRandom = new PseudoRandom();
 
     [Test]
     public void WhenGettingNextInt32_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(
         [Values(10)] int samplesCount)
     {
         // Arrange.
-        var randomizer = _standardRandomizer;
+        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
 
         // Act.
@@ -38,7 +38,7 @@ internal class StandardRandomizerTests
         // Arrange.
         const int minValue = 0;
         const int maxValue = int.MaxValue;
-        var randomizer = _standardRandomizer;
+        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
 
         // Act.
@@ -60,7 +60,7 @@ internal class StandardRandomizerTests
         // Arrange.
         const int minValue = int.MinValue;
         const int maxValue = int.MaxValue;
-        var randomizer = _standardRandomizer;
+        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
 
         // Act.
@@ -82,7 +82,7 @@ internal class StandardRandomizerTests
     {
         // Arrange.
         const double tolerance = 0.01;
-        var randomizer = _standardRandomizer;
+        var randomizer = _pseudoRandom;
         var randomNumbers = new double[samplesCount];
 
         // Act.
@@ -101,7 +101,7 @@ internal class StandardRandomizerTests
     public void WhenGettingNextByteArray_AndBufferWithLenght64_ThenBufferIsNotNullOrEmpty()
     {
         // Arrange.
-        var randomizer = _standardRandomizer;
+        var randomizer = _pseudoRandom;
         var buffer = new byte[64];
 
         // Act.
