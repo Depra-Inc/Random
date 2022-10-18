@@ -3,7 +3,6 @@
 
 using System;
 using System.Reflection;
-
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
 using System.Diagnostics.CodeAnalysis;
 #define CSHARP8_OR_GREATER

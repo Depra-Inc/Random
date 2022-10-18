@@ -3,7 +3,6 @@
 
 using Depra.Random.Domain.Exceptions;
 using Depra.Random.Domain.Randomizers;
-using Depra.Random.Extensions;
 
 namespace Depra.Random.Domain.Extensions
 {

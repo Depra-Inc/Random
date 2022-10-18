@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Collections;
-using Depra.Random.Application.System;
-using Depra.Random.Domain.Randomizers;
+using Depra.Random.Application.System.Collections;
+using Depra.Random.Application.System.Randoms;
 
 namespace Depra.Random.Application.UnitTests;
 
-[TestFixture(TestOf = typeof(ConcurrentPseudoRandom))]
+[TestFixture(TestOf = typeof(ConcurrentPseudoRandomizers))]
 internal class ConcurrentPseudoRandomTests
 {
     private ConcurrentPseudoRandom _concurrentPseudoRandom = null!;
@@ -76,7 +76,7 @@ internal class ConcurrentPseudoRandomTests
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        ITypedRandomizer<double> randomizer = _concurrentPseudoRandom;
+        var randomizer = _concurrentPseudoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -85,7 +85,7 @@ internal class ConcurrentPseudoRandomTests
             var randomNumbers = new double[samplesCount];
             for (var i = 0; i < samplesCount; i++)
             {
-                randomNumbers[i] = randomizer.Next();
+                randomNumbers[i] = randomizer.NextDouble();
             }
 
             var threadIssues = randomNumbers.Count(x => x == 0);
@@ -104,7 +104,7 @@ internal class ConcurrentPseudoRandomTests
     {
         // Arrange.
         const int bufferLength = 8;
-        IArrayRandomizer<byte[]> randomizer = _concurrentPseudoRandom;
+        var randomizer = _concurrentPseudoRandom;
         var sourceBuffer = new byte[bufferLength];
         var allThreadIssues = 0;
 
@@ -115,7 +115,7 @@ internal class ConcurrentPseudoRandomTests
             for (var i = 0; i < samplesCount; i++)
             {
                 var bufferCopy = sourceBuffer.ToArray();
-                randomizer.Next(bufferCopy);
+                randomizer.NextBytes(bufferCopy);
                 results.Add(bufferCopy);
             }
 

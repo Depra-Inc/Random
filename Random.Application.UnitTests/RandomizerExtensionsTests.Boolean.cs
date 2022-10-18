@@ -1,7 +1,8 @@
 // Copyright © 2022 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-using Depra.Random.Application.System;
+using Depra.Random.Application.Extensions;
+using Depra.Random.Application.System.Collections;
 using Depra.Random.Domain.Extensions;
 using Depra.Random.Domain.Randomizers;
 
@@ -12,17 +13,23 @@ internal static partial class RandomizerExtensionsTests
     [TestFixture]
     internal class Boolean
     {
-        private PseudoRandom _randomizer = null!;
+        private INumberRandomizer<int> _intRandomizer = null!;
+        private ITypedRandomizer<double> _doubleRandomizer = null!;
 
         [SetUp]
-        public void SetUp() => _randomizer = new PseudoRandom();
+        public void SetUp()
+        {
+            var randomizers = new PseudoRandomizers();
+            _intRandomizer = randomizers.GetNumberRandomizer<int>();
+            _doubleRandomizer = randomizers.GetTypedRandomizer<double>();
+        }
 
         [Test]
         public void WhenGettingNextBooleans_AndProbabilityIsDefault_ThenRandomBooleansAreNotTheSame(
             [Values(100)] int samplesCount)
         {
             // Arrange.
-            INumberRandomizer<int> randomizer = _randomizer;
+            var randomizer = _intRandomizer;
             var randomBooleans = new bool[samplesCount];
 
             // Act.
@@ -41,7 +48,7 @@ internal static partial class RandomizerExtensionsTests
         {
             // Arrange.
             const int probability = 1;
-            ITypedRandomizer<double> randomizer = _randomizer;
+            var randomizer = _doubleRandomizer;
             var randomBooleans = new bool[samplesCount];
 
             // Act.
@@ -60,7 +67,7 @@ internal static partial class RandomizerExtensionsTests
         {
             // Arrange.
             const int probability = 0;
-            ITypedRandomizer<double> randomizer = _randomizer;
+            var randomizer = _doubleRandomizer;
             var randomBooleans = new bool[samplesCount];
 
             // Act.

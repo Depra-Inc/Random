@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Depra.Random.Domain.Randomizers;
 
-namespace Depra.Random.Extensions
+namespace Depra.Random.Application.Extensions
 {
     public static class ListExtensions
     {

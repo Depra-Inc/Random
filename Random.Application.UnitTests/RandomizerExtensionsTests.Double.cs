@@ -1,7 +1,8 @@
 // Copyright © 2022 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-using Depra.Random.Application.System;
+using Depra.Random.Application.Extensions;
+using Depra.Random.Application.System.Collections;
 using Depra.Random.Application.UnitTests.Helpers;
 using Depra.Random.Domain.Extensions;
 using Depra.Random.Domain.Randomizers;
@@ -16,7 +17,7 @@ internal static partial class RandomizerExtensionsTests
         private ITypedRandomizer<double> _randomizer = null!;
 
         [SetUp]
-        public void SetUp() => _randomizer = new PseudoRandom();
+        public void SetUp() => _randomizer = new PseudoRandomizers().GetTypedRandomizer<double>();
 
         [Test]
         public void WhenGettingNextDouble_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(
@@ -40,7 +41,7 @@ internal static partial class RandomizerExtensionsTests
         }
 
         [Test]
-        public void WhenGettingNextDouble_AndInRangeWithMinAndMax_ThenRandomNubmersAreInGivenRange(
+        public void WhenGettingNextDouble_AndInRangeWithMinAndMax_ThenRandomNumbersAreInGivenRange(
             [Values(100)] int samplesCount)
         {
             // Arrange.

@@ -1,26 +1,28 @@
 // Copyright © 2022 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-using Depra.Random.Application.System;
+using Depra.Random.Application.Extensions;
+using Depra.Random.Application.System.Collections;
 using Depra.Random.Application.UnitTests.Helpers;
+using Depra.Random.Domain.Extensions;
 
 namespace Depra.Random.Application.UnitTests;
 
-[TestFixture]
-internal class PseudoRandomTests
+[TestFixture(TestOf = typeof(PseudoRandomizers))]
+internal class PseudoRandomizersTests
 {
-    private PseudoRandom _pseudoRandom = null!;
+    private PseudoRandomizers _pseudoRandomizers = null!;
 
     [SetUp]
-    public void SetUp() => _pseudoRandom = new PseudoRandom();
+    public void SetUp() => _pseudoRandomizers = new PseudoRandomizers();
 
     [Test]
     public void WhenGettingNextInt32_AndRangeIsDefault_ThenRandomNumbersAreNotTheSame(
         [Values(10)] int samplesCount)
     {
         // Arrange.
-        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
+        var randomizer = _pseudoRandomizers.GetNumberRandomizer<int>();
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
@@ -41,8 +43,8 @@ internal class PseudoRandomTests
         // Arrange.
         const int minValue = 0;
         const int maxValue = int.MaxValue;
-        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
+        var randomizer = _pseudoRandomizers.GetNumberRandomizer<int>();
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
@@ -63,8 +65,8 @@ internal class PseudoRandomTests
         // Arrange.
         const int minValue = int.MinValue;
         const int maxValue = int.MaxValue;
-        var randomizer = _pseudoRandom;
         var randomNumbers = new int[samplesCount];
+        var randomizer = _pseudoRandomizers.GetNumberRandomizer<int>();
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
@@ -85,8 +87,8 @@ internal class PseudoRandomTests
     {
         // Arrange.
         const double tolerance = 0.01;
-        var randomizer = _pseudoRandom;
         var randomNumbers = new double[samplesCount];
+        var randomizer = _pseudoRandomizers.GetTypedRandomizer<double>();
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
@@ -104,11 +106,12 @@ internal class PseudoRandomTests
     public void WhenGettingNextByteArray_AndBufferWithLenght64_ThenBufferIsNotNullOrEmpty()
     {
         // Arrange.
-        var randomizer = _pseudoRandom;
-        var buffer = new byte[64];
+        const int bufferLenght = 64;
+        var buffer = new byte[bufferLenght];
+        var randomizer = _pseudoRandomizers.GetArrayRandomizer<byte[]>();
 
         // Act.
-        randomizer.NextBytes(buffer);
+        randomizer.Next(buffer);
         ConsoleHelper.PrintBytes(buffer);
 
         // Assert.

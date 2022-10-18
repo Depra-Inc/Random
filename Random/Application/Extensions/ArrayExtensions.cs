@@ -4,7 +4,7 @@
 using System;
 using Depra.Random.Domain.Randomizers;
 
-namespace Depra.Random.Extensions
+namespace Depra.Random.Application.Extensions
 {
     /// <summary>
     /// <see cref="Array"/> extensions.

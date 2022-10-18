@@ -1,3 +1,6 @@
+// Copyright © 2022 Nikolay Melnikov. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 using System;
 using System.Collections.Generic;
 using Depra.Random.Application.Services;
@@ -19,7 +22,6 @@ namespace Depra.Random.Application.ServiceBuilder
                 Throw.RandomizerForTypeAlreadyRegistered(valueType);
             }
             
-            Console.WriteLine(valueType.Name);
             _randomizers.Add(valueType, randomizer);
             
             return this;

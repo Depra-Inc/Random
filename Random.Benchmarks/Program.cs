@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Running;
@@ -18,7 +19,8 @@ public static class Program
         BenchmarkRunner.Run<RandomServiceBenchmarks>(DefaultConfig.Instance
             .AddValidator(JitOptimizationsValidator.FailOnError)
             .AddJob(Job.Default.WithToolchain(InProcessEmitToolchain.Instance))
-            .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest)));
+            .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest))
+            .AddDiagnoser(MemoryDiagnoser.Default));
         
         // BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
         //     .AddValidator(JitOptimizationsValidator.FailOnError)

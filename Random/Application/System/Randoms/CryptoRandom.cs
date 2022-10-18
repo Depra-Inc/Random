@@ -2,41 +2,50 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using Depra.Random.Domain.Exceptions;
-using Depra.Random.Domain.Randomizers;
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+#define CSHARP8_OR_GREATER
+#endif
 
-namespace Depra.Random.Application.System
+namespace Depra.Random.Application.System.Randoms
 {
     /// <summary>
     /// A random number generator based on the <see cref="RNGCryptoServiceProvider"/>.
     /// </summary>
-    public sealed class CryptoRandomizer : ITypedRandomizer<int>, ITypedRandomizer<double>, IArrayRandomizer<byte[]>,
-        IDisposable
+    public sealed class CryptoRandom : global::System.Random, IDisposable
     {
-        private static readonly Type[] VALUE_TYPES = {typeof(int), typeof(double), typeof(byte[])};
-
         private readonly RNGCryptoServiceProvider _rng;
         private bool _disposed;
 
-        public IEnumerable<Type> ValueTypes => VALUE_TYPES;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CryptoRandom"/> class.
+        /// </summary>
+        public CryptoRandom() => _rng = new RNGCryptoServiceProvider();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CryptoRandomizer"/> class.
+        /// Initializes a new instance of the <see cref="CryptoRandom"/> class.
+        /// This method will disregard whatever value is passed as seed and it's only implemented
+        /// in order to be fully backwards compatible with <see cref="Random"/>.
         /// </summary>
-        public CryptoRandomizer() => _rng = new RNGCryptoServiceProvider();
+        /// <param name="ignoredSeed">The ignored seed.</param>
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "ignoredSeed",
+            Justification = "Cannot remove this parameter as we implement the full API of System.Random")]
+        public CryptoRandom(int ignoredSeed) : this() { }
 
-        public int Next()
+        /// <inheritdoc />
+        public override int Next()
         {
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+#if CSHARP8_OR_GREATER
             return RandomNumberGenerator.GetInt32(0, int.MaxValue);
 #else
             return GenerateInt32();
 #endif
         }
 
-        public int Next(int maxExclusive)
+        /// <inheritdoc />
+        public override int Next(int maxExclusive)
         {
             if (maxExclusive < 0)
             {
@@ -46,7 +55,8 @@ namespace Depra.Random.Application.System
             return Next(0, maxExclusive);
         }
 
-        public int Next(int minInclusive, int maxExclusive)
+        /// <inheritdoc />
+        public override int Next(int minInclusive, int maxExclusive)
         {
             if (minInclusive > maxExclusive)
             {
@@ -58,16 +68,18 @@ namespace Depra.Random.Application.System
                 return minInclusive;
             }
 
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+#if CSHARP8_OR_GREATER
             return RandomNumberGenerator.GetInt32(minInclusive, maxExclusive);
 #else
             return GenerateInt32(minInclusive, maxExclusive);
 #endif
         }
 
-        double ITypedRandomizer<double>.Next() => GenerateUInt32() / (uint.MaxValue + 1.0);
+        /// <inheritdoc />
+        public override double NextDouble() => GenerateUInt32() / (uint.MaxValue + 1.0);
 
-        void IArrayRandomizer<byte[]>.Next(byte[] buffer) => _rng.GetBytes(buffer);
+        /// <inheritdoc />
+        public override void NextBytes(byte[] buffer) => _rng.GetBytes(buffer);
 
         /// <summary>
         /// Gets one random unsigned 32bit integer.
@@ -82,8 +94,8 @@ namespace Depra.Random.Application.System
         /// <summary>
         /// Gets one random signed 32bit integer in range.
         /// </summary>
-        private int GenerateInt32(int minInclusive, int maxExclusive) => (int) Math.Floor(minInclusive +
-            ((double) maxExclusive - minInclusive) * (this as ITypedRandomizer<double>).Next());
+        private int GenerateInt32(int minInclusive, int maxExclusive) =>
+            (int) Math.Floor(minInclusive + ((double) maxExclusive - minInclusive) * NextDouble());
 
         /// <summary>
         /// Gets one random byte array.
@@ -96,7 +108,7 @@ namespace Depra.Random.Application.System
             return randomBytes;
         }
 
-        ~CryptoRandomizer() => Dispose(false);
+        ~CryptoRandom() => Dispose(false);
 
         /// <inheritdoc />
         public void Dispose()

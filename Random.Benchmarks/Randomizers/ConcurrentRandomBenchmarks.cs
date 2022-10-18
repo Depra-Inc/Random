@@ -2,45 +2,43 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Attributes;
-using Depra.Random.Application.System;
-using Depra.Random.Domain.Extensions;
+using Depra.Random.Application.System.Randoms;
 
 namespace Depra.Random.Benchmarks.Randomizers;
 
-[MemoryDiagnoser]
 public class ConcurrentRandomBenchmarks
 {
     private System.Random _random;
-    private ConcurrentPseudoRandom _concurrentRandom;
+    private ConcurrentPseudoRandom _concurrentPseudoRandom;
 
     [GlobalSetup]
     public void Setup()
     {
         _random = new System.Random();
-        _concurrentRandom = new ConcurrentPseudoRandom();
+        _concurrentPseudoRandom = new ConcurrentPseudoRandom();
     }
         
     [Benchmark(Baseline = true)]
-    public int NextInt32_Pseudo() => _random.Next();
+    public int NextInt32_Manual() => _random.Next();
 
     [Benchmark]
-    public int NextInt32_Concurrent() => _concurrentRandom.Next();
+    public int NextInt32_Concurrent() => _concurrentPseudoRandom.Next();
 
     [Benchmark]
-    public int NextInt32_Pseudo_InRange() => _random.Next(int.MinValue, int.MaxValue);
+    public int NextInt32_Manual_InRange() => _random.Next(int.MinValue, int.MaxValue);
 
     [Benchmark]
-    public int NextInt32_Concurrent_InRange() => _concurrentRandom.Next(int.MinValue, int.MaxValue);
+    public int NextInt32_Concurrent_InRange() => _concurrentPseudoRandom.Next(int.MinValue, int.MaxValue);
 
     [Benchmark]
-    public double NextDouble_Pseudo() => _random.NextDouble();
+    public double NextDouble_Manual() => _random.NextDouble();
 
     [Benchmark]
-    public double NextDouble_Concurrent() => _concurrentRandom.NextDouble();
+    public double NextDouble_Concurrent() => _concurrentPseudoRandom.NextDouble();
 
     [Benchmark]
-    public void NextBytes_Pseudo() => _random.NextBytes(new byte[64]);
+    public void NextBytes_Manual() => _random.NextBytes(new byte[64]);
 
     [Benchmark]
-    public void NextBytes_Concurrent() => _concurrentRandom.NextBytes(64);
+    public void NextBytes_Concurrent() => _concurrentPseudoRandom.NextBytes(new byte[64]);
 }

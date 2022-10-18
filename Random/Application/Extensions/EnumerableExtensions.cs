@@ -7,7 +7,7 @@ using System.Linq;
 using Depra.Random.Domain.Extensions;
 using Depra.Random.Domain.Randomizers;
 
-namespace Depra.Random.Extensions
+namespace Depra.Random.Application.Extensions
 {
     public static class EnumerableExtensions
     {

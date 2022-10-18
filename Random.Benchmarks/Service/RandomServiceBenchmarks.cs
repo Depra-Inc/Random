@@ -4,36 +4,34 @@
 using BenchmarkDotNet.Attributes;
 using Depra.Random.Application.ServiceBuilder;
 using Depra.Random.Application.Services;
-using Depra.Random.Application.System;
+using Depra.Random.Application.System.Collections;
 using Depra.Random.Domain.Randomizers;
 
 namespace Depra.Random.Benchmarks.Service;
 
-[MemoryDiagnoser]
 public class RandomServiceBenchmarks
 {
-    private const int BYTE_BUFFER_SIZE = 32;
-
-    private global::System.Random _random;
+    private System.Random _random;
     private IRandomService _randomService;
     private ITypedRandomizer<int> _intRandomizer;
     private ITypedRandomizer<double> _doubleRandomizer;
     private IArrayRandomizer<byte[]> _bytesRandomizer;
 
+    [Params(8)]
+    public int BufferSize { get; set; }
+    
     [GlobalSetup]
     public void Setup()
     {
-        _random = new global::System.Random();
+        _random = new System.Random();
 
-        var randomizer = new PseudoRandom();
-        _intRandomizer = randomizer;
-        _doubleRandomizer = randomizer;
-        _bytesRandomizer = randomizer;
+        var pseudoRandomizers = new PseudoRandomizers();
+        _intRandomizer = (ITypedRandomizer<int>) pseudoRandomizers.GetRandomizer(typeof(int));
+        _doubleRandomizer = (ITypedRandomizer<double>) pseudoRandomizers.GetRandomizer(typeof(double));
+        _bytesRandomizer = (IArrayRandomizer<byte[]>) pseudoRandomizers.GetRandomizer(typeof(byte[]));
 
         _randomService = new RandomServiceBuilder()
-            .With<int>(_intRandomizer)
-            .With<double>(_doubleRandomizer)
-            .With<byte[]>(_bytesRandomizer)
+            .With(pseudoRandomizers)
             .Build();
     }
 
@@ -56,11 +54,12 @@ public class RandomServiceBenchmarks
     public double NextDouble_Depra_WithCache() => _doubleRandomizer.Next();
 
     [Benchmark]
-    public void NextBytes_Manual() => _random.NextBytes(new byte[BYTE_BUFFER_SIZE]);
+    public void NextBytes_Manual() => _random.NextBytes(new byte[BufferSize]);
 
     [Benchmark]
-    public void NextBytes_Depra() => _randomService.GetArrayRandomizer<byte[]>().Next(new byte[BYTE_BUFFER_SIZE]);
+    public void NextBytes_Depra() =>
+        _randomService.GetArrayRandomizer<byte[]>().Next(new byte[BufferSize]);
 
     [Benchmark]
-    public void NextBytes_Depra_WithCache() => _bytesRandomizer.Next(new byte[BYTE_BUFFER_SIZE]);
+    public void NextBytes_Depra_WithCache() => _bytesRandomizer.Next(new byte[BufferSize]);
 }

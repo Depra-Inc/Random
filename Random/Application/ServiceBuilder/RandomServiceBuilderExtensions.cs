@@ -1,3 +1,6 @@
+// Copyright © 2022 Nikolay Melnikov. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 using System;
 using Depra.Random.Domain.Randomizers;
 
@@ -5,11 +8,11 @@ namespace Depra.Random.Application.ServiceBuilder
 {
     public static class RandomServiceBuilderExtensions
     {
-        public static IRandomServiceBuilder With<T>(this IRandomServiceBuilder builder, ITypedRandomizer<T> randomizer) =>
-            builder.With(typeof(T), randomizer);
+        public static IRandomServiceBuilder With<T>(this IRandomServiceBuilder builder,
+            ITypedRandomizer<T> randomizer) => builder.With(typeof(T), randomizer);
 
-        public static IRandomServiceBuilder With<T>(this IRandomServiceBuilder builder, IArrayRandomizer<T> randomizer) =>
-            builder.With(typeof(T), randomizer);
+        public static IRandomServiceBuilder With<T>(this IRandomServiceBuilder builder,
+            IArrayRandomizer<T> randomizer) => builder.With(typeof(T), randomizer);
 
         public static IRandomServiceBuilder With(this IRandomServiceBuilder builder,
             IRandomizerCollection fromCollection)
@@ -17,10 +20,8 @@ namespace Depra.Random.Application.ServiceBuilder
             var randomizers = fromCollection.GetAllRandomizers();
             foreach (var randomizer in randomizers)
             {
-                foreach (var valueType in randomizer.ValueTypes)
-                {
-                    builder.With(valueType, randomizer);
-                }
+                Console.WriteLine(randomizer.ValueType);
+                builder.With(randomizer.ValueType, randomizer);
             }
 
             return builder;

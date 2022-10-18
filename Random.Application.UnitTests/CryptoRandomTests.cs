@@ -2,29 +2,28 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Collections;
-using Depra.Random.Application.System;
+using Depra.Random.Application.System.Randoms;
 using Depra.Random.Application.UnitTests.Helpers;
-using Depra.Random.Domain.Randomizers;
 
 namespace Depra.Random.Application.UnitTests;
 
-[TestFixture(TestOf = typeof(CryptoRandomizer))]
+[TestFixture(TestOf = typeof(CryptoRandom))]
 internal class CryptoRandomTests
 {
-    private CryptoRandomizer _cryptoRandomizer = null!;
+    private CryptoRandom _cryptoRandom = null!;
 
     [SetUp]
-    public void SetUp() => _cryptoRandomizer = new CryptoRandomizer();
+    public void SetUp() => _cryptoRandom = new CryptoRandom();
 
     [TearDown]
-    public void TearDown() => _cryptoRandomizer.Dispose();
+    public void TearDown() => _cryptoRandom.Dispose();
 
     [Test]
     public void WhenGettingNextInt32_AndRangeIsDefault_ThenRandomNumbersAreUnique(
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        var randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var randomNumbers = new int[samplesCount];
 
         // Act.
@@ -46,7 +45,7 @@ internal class CryptoRandomTests
         // Arrange.
         const int minValue = int.MinValue;
         const int maxValue = int.MaxValue;
-        var randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var randomNumbers = new int[samplesCount];
 
         // Act.
@@ -66,13 +65,13 @@ internal class CryptoRandomTests
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        ITypedRandomizer<double> randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var randomNumbers = new double[samplesCount];
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
         {
-            randomNumbers[i] = randomizer.Next();
+            randomNumbers[i] = randomizer.NextDouble();
         }
 
         ConsoleHelper.PrintCollection(randomNumbers);
@@ -87,14 +86,14 @@ internal class CryptoRandomTests
     {
         // Arrange.
         const int bufferLength = 8;
-        IArrayRandomizer<byte[]> randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var bytesStack = new Stack<byte[]>();
 
         // Act.
         for (var i = 0; i < samplesCount; i++)
         {
             var buffer = new byte[bufferLength];
-            randomizer.Next(buffer);
+            randomizer.NextBytes(buffer);
             bytesStack.Push(buffer);
 
             ConsoleHelper.PrintBytes(buffer);
@@ -111,7 +110,7 @@ internal class CryptoRandomTests
         // Arrange.
         const int minValue = int.MinValue;
         const int maxValue = int.MaxValue;
-        var randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -138,7 +137,7 @@ internal class CryptoRandomTests
         [Values(10_000)] int samplesCount)
     {
         // Arrange.
-        ITypedRandomizer<double> randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var allThreadIssues = 0;
 
         // Act.
@@ -147,7 +146,7 @@ internal class CryptoRandomTests
             var numbers = new double[samplesCount];
             for (var i = 0; i < samplesCount; i++)
             {
-                numbers[i] = randomizer.Next();
+                numbers[i] = randomizer.NextDouble();
             }
 
             var threadIssues = numbers.Count(x => x == 0);
@@ -166,7 +165,7 @@ internal class CryptoRandomTests
     {
         // Arrange.
         const int bufferLength = 8;
-        IArrayRandomizer<byte[]> randomizer = _cryptoRandomizer;
+        var randomizer = _cryptoRandom;
         var sourceBuffer = new byte[bufferLength];
         var allThreadIssues = 0;
 
@@ -177,7 +176,7 @@ internal class CryptoRandomTests
             for (var i = 0; i < samplesCount; i++)
             {
                 var bufferCopy = sourceBuffer.ToArray();
-                randomizer.Next(bufferCopy);
+                randomizer.NextBytes(bufferCopy);
                 results.Add(bufferCopy);
             }
 
