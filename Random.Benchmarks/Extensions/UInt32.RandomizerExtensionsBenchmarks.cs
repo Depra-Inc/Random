@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Attributes;
+using Depra.Random.Application.Extensions;
 using Depra.Random.Application.System.Collections;
 using Depra.Random.Domain.Extensions;
 using Depra.Random.Domain.Randomizers;
