@@ -2,20 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Attributes;
-using Depra.Random.System;
+using Depra.Random.Application.System;
+using Depra.Random.Domain.Extensions;
 
 namespace Depra.Random.Benchmarks.Randomizers;
 
 [MemoryDiagnoser]
 public class ConcurrentRandomBenchmarks
 {
-    private global::System.Random _random;
+    private System.Random _random;
     private ConcurrentPseudoRandom _concurrentRandom;
 
     [GlobalSetup]
     public void Setup()
     {
-        _random = new global::System.Random();
+        _random = new System.Random();
         _concurrentRandom = new ConcurrentPseudoRandom();
     }
         
@@ -41,5 +42,5 @@ public class ConcurrentRandomBenchmarks
     public void NextBytes_Pseudo() => _random.NextBytes(new byte[64]);
 
     [Benchmark]
-    public void NextBytes_Concurrent() => _concurrentRandom.NextBytes(new byte[64]);
+    public void NextBytes_Concurrent() => _concurrentRandom.NextBytes(64);
 }

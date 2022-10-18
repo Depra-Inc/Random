@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Depra.Random.UnitTests")]
+[assembly: InternalsVisibleTo("Depra.Random.Application.UnitTests")]

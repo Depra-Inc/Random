@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Random.Benchmarks", "Random.Benchmarks\Random.Benchmarks.csproj", "{5B172691-3700-4D92-99C3-8099E50A63C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Random.UnitTests", "Random.UnitTests\Random.UnitTests.csproj", "{F85C7F8D-3FD8-41C7-BF0B-8F3271B0F697}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Random.Application.UnitTests", "Random.Application.UnitTests\Random.Application.UnitTests.csproj", "{F85C7F8D-3FD8-41C7-BF0B-8F3271B0F697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

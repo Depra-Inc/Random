@@ -7,6 +7,7 @@ using BenchmarkDotNet.Order;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.InProcess.Emit;
 using BenchmarkDotNet.Validators;
+using Depra.Random.Benchmarks.Service;
 
 namespace Depra.Random.Benchmarks;
 
@@ -14,9 +15,14 @@ public static class Program
 {
     private static void Main()
     {
-        BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
+        BenchmarkRunner.Run<RandomServiceBenchmarks>(DefaultConfig.Instance
             .AddValidator(JitOptimizationsValidator.FailOnError)
             .AddJob(Job.Default.WithToolchain(InProcessEmitToolchain.Instance))
             .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest)));
+        
+        // BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
+        //     .AddValidator(JitOptimizationsValidator.FailOnError)
+        //     .AddJob(Job.Default.WithToolchain(InProcessEmitToolchain.Instance))
+        //     .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest)));
     }
 }

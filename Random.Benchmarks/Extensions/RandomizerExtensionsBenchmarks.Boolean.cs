@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Attributes;
-using Depra.Random.Extensions;
+using Depra.Random.Domain.Extensions;
 
 namespace Depra.Random.Benchmarks.Extensions;
 
 public partial class RandomizerExtensionsBenchmarks
 {
     [Benchmark]
-    public bool NextBool() => _randomizer.NextBoolean();
+    public bool NextBool() => _random.NextBoolean();
 }

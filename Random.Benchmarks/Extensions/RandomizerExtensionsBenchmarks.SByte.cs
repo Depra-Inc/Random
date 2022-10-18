@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using BenchmarkDotNet.Attributes;
-using Depra.Random.Extensions;
+using Depra.Random.Domain.Extensions;
 
 namespace Depra.Random.Benchmarks.Extensions;
 
 public partial class RandomizerExtensionsBenchmarks
 {
     [Benchmark]
-    public sbyte NextSByte() => _randomizer.NextSByte();
+    public sbyte NextSByte() => _random.NextSByte();
 
     [Benchmark]
-    public sbyte NextSByteInRange() => _randomizer.NextSByte(sbyte.MinValue, sbyte.MaxValue);
+    public sbyte NextSByteInRange() => _random.NextSByte(sbyte.MinValue, sbyte.MaxValue);
 }
