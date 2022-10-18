@@ -63,8 +63,8 @@ internal class RandomServiceTests
     {
         // Arrange.
         var randomizerValueType = typeof(int);
-        var randomizer = Substitute.For<ITypedRandomizer<int>>();
         var randomService = new RandomService();
+        var randomizer = Substitute.For<ITypedRandomizer<int>>();
         randomService.RegisterRandomizer(randomizerValueType, randomizer);
         
         // Act.
@@ -72,5 +72,22 @@ internal class RandomServiceTests
         
         // Assert.
         act.Should().Throw<RandomizerForTypeAlreadyRegisteredException>();
+    }
+
+    [Test]
+    public void WhenDisposingService_AndServiceContainRandomizers_ThenExceptionNotThrown()
+    {
+        // Arrange.
+        var randomService = new RandomService();
+        var randomizer = Substitute.For<ITypedRandomizer<int>>();
+        randomService.RegisterRandomizer(typeof(int), randomizer);
+        randomService.RegisterRandomizer(typeof(double), randomizer);
+        randomService.RegisterRandomizer(typeof(byte[]), randomizer);
+        
+        // Act.
+        var act = () => randomService.Dispose();
+
+        // Assert.
+        act.Should().NotThrow();
     }
 }

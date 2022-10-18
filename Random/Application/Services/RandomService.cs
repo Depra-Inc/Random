@@ -8,10 +8,11 @@ using Depra.Random.Domain.Randomizers;
 
 namespace Depra.Random.Application.Services
 {
-    /// <inheritdoc />
-    public sealed class RandomService : IRandomService
+    /// <inheritdoc cref="IRandomService" />
+    public sealed class RandomService : IRandomService, IDisposable
     {
         private readonly IDictionary<Type, IRandomizer> _randomizers;
+        private bool _disposed;
 
         public IRandomizer GetRandomizer(Type valueType)
         {
@@ -40,5 +41,44 @@ namespace Depra.Random.Application.Services
 
         public RandomService(IDictionary<Type, IRandomizer> randomizers = null) =>
             _randomizers = randomizers ?? new Dictionary<Type, IRandomizer>();
+
+        ~RandomService() => Dispose(false);
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Private implementation of Dispose pattern.
+        /// </summary>
+        /// <param name="disposing"></param>
+        private void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                DisposeRandomizers();
+            }
+
+            _disposed = true;
+        }
+
+        private void DisposeRandomizers()
+        {
+            foreach (var randomizer in _randomizers.Values)
+            {
+                if (randomizer is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
     }
 }
