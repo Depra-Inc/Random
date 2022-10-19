@@ -1,12 +1,13 @@
 // Copyright © 2022 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
+#define CSHARP8_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
+
 using System;
 using System.Reflection;
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER
-using System.Diagnostics.CodeAnalysis;
-#define CSHARP8_OR_GREATER
-#endif
 
 namespace Depra.Random.Domain.Exceptions
 {

@@ -12,7 +12,7 @@ namespace Depra.Random.Domain.Extensions
         {
 #if NET5_0_OR_GREATER
             var values = Enum.GetValues<TEnum>();
-            return values[random.Next(values.Length)];
+            return values[randomizer.Next(values.Length)];
 #else
             return (TEnum) NextEnum(randomizer, typeof(TEnum));
 #endif
