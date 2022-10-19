@@ -21,15 +21,12 @@ namespace Depra.Random.Application.ServiceBuilder
             {
                 Throw.RandomizerForTypeAlreadyRegistered(valueType);
             }
-            
+
             _randomizers.Add(valueType, randomizer);
-            
+
             return this;
         }
 
-        public RandomServiceBuilder()
-        {
-            _randomizers = new Dictionary<Type, IRandomizer>();
-        }
+        public RandomServiceBuilder() => _randomizers = new Dictionary<Type, IRandomizer>();
     }
 }

@@ -14,6 +14,10 @@ namespace Depra.Random.Application.System.Collections
     {
         private static readonly SystemRandomizersMapper RANDOMIZERS_MAPPER;
 
+        public IRandomizer GetRandomizer(Type valueType) => RANDOMIZERS_MAPPER.GetRandomizer(valueType);
+
+        public IEnumerable<IRandomizer> GetAllRandomizers() => RANDOMIZERS_MAPPER.GetAllRandomizers();
+
         static ConcurrentPseudoRandomizers()
         {
             var randomImpl =
@@ -28,9 +32,5 @@ namespace Depra.Random.Application.System.Collections
                 new DoubleRandomProxy(randomImpl),
                 new ByteArrayRandomProxy(randomImpl));
         }
-
-        public IRandomizer GetRandomizer(Type valueType) => RANDOMIZERS_MAPPER.GetRandomizer(valueType);
-
-        public IEnumerable<IRandomizer> GetAllRandomizers() => RANDOMIZERS_MAPPER.GetAllRandomizers();
     }
 }

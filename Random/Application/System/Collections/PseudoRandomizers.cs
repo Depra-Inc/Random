@@ -16,6 +16,10 @@ namespace Depra.Random.Application.System.Collections
     {
         private readonly SystemRandomizersMapper _randomizersMapper;
 
+        public IRandomizer GetRandomizer(Type valueType) => _randomizersMapper.GetRandomizer(valueType);
+
+        public IEnumerable<IRandomizer> GetAllRandomizers() => _randomizersMapper.GetAllRandomizers();
+
         public PseudoRandomizers()
         {
             var random = new global::System.Random();
@@ -24,9 +28,5 @@ namespace Depra.Random.Application.System.Collections
                 new DoubleRandomProxy(random),
                 new ByteArrayRandomProxy(random));
         }
-
-        public IRandomizer GetRandomizer(Type valueType) => _randomizersMapper.GetRandomizer(valueType);
-
-        public IEnumerable<IRandomizer> GetAllRandomizers() => _randomizersMapper.GetAllRandomizers();
     }
 }
