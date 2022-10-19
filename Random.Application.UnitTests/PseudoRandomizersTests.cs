@@ -37,12 +37,12 @@ internal class PseudoRandomizersTests
     }
 
     [Test]
-    public void WhenGettingNextInt32_AndInRangeWithMin_ThenRandomNumbersAreInGivenRange(
+    public void WhenGettingNextInt32_AndInRangeWithMax_ThenRandomNumbersAreInGivenRange(
         [Values(10)] int samplesCount)
     {
         // Arrange.
         const int minValue = 0;
-        const int maxValue = int.MaxValue;
+        const int maxValue = int.MaxValue / 2;
         var randomNumbers = new int[samplesCount];
         var randomizer = _pseudoRandomizers.GetNumberRandomizer<int>();
 
