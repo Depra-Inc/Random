@@ -1,9 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <AssemblyName>Depra.Random</AssemblyName>
         <RootNamespace>Depra.Random</RootNamespace>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyVersion>1.1.0.0</AssemblyVersion>
+        <FileVersion>1.1.0.0</FileVersion>
+        <Version>1.1.0</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Authors>Nikolay Melnikov</Authors>
+        <Company>Depra</Company>
+        <Description>Service containing a random value generator</Description>
+        <Copyright>Copyright © 2022 Nikolay Melnikov. All rights reserved.</Copyright>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/Depression-aggression/RandomService</RepositoryUrl>
+        <RepositoryType>Module</RepositoryType>
+        <PackageTags>csharp, service, random, randomization, random-generation, random-number-generators, randomizer, pseudorandom, threadsafety, cryptorandom, saferandom</PackageTags>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\LICENSE">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 
 </Project>
